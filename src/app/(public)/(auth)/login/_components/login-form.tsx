@@ -9,8 +9,13 @@ import { Label } from '@/components/ui/label'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoginBody, LoginBodyType } from '@/schemaValidations/auth.schema'
+import { useLoginMutation } from '@/hooks'
+import { handleErrorApi } from '@/lib/utils'
+import { useToast } from '@/components/ui/use-toast'
 
 export function LoginForm() {
+  const toast = useToast()
+  const loginMutation = useLoginMutation()
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
     defaultValues: {
@@ -18,6 +23,22 @@ export function LoginForm() {
       password: ''
     }
   })
+
+  const onSubmit = (payload: LoginBodyType) => {
+    try {
+      loginMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          toast.toast({
+            description: data.payload.message
+          })
+        }
+      })
+    } catch (error) {
+      handleErrorApi({
+        error
+      })
+    }
+  }
 
   return (
     <Card className="mx-auto max-w-sm">
@@ -27,7 +48,11 @@ export function LoginForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form className="space-y-2 max-w-[600px] flex-shrink-0 w-full" noValidate>
+          <form
+            className="space-y-2 max-w-[600px] flex-shrink-0 w-full"
+            noValidate
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
             <div className="grid gap-4">
               <FormField
                 control={form.control}

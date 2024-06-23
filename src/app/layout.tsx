@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 
 import { cn } from '@/lib/utils'
-import { ThemeProvider } from '@/providers'
+import { AppProvider, ThemeProvider } from '@/providers'
 import { Toaster } from '@/components/ui/toaster'
 
 import './globals.css'
@@ -28,10 +28,12 @@ export default function RootLayout({
         suppressHydrationWarning
         className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <AppProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </AppProvider>
       </body>
     </html>
   )
