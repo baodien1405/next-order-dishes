@@ -1,4 +1,6 @@
-export const getAccessTokenFromLS = () => localStorage.getItem('accessToken')
+import { isClient } from '@/lib/http'
+
+export const getAccessTokenFromLS = () => (isClient ? localStorage.getItem('accessToken') : null)
 
 export const setAccessTokenToLS = (accessToken: string) => {
   localStorage.setItem('accessToken', accessToken)
@@ -8,7 +10,7 @@ export const removeAccessTokenToLS = () => {
   localStorage.removeItem('accessToken')
 }
 
-export const getRefreshTokenFromLS = () => localStorage.getItem('refreshToken')
+export const getRefreshTokenFromLS = () => (isClient ? localStorage.getItem('refreshToken') : null)
 
 export const setRefreshTokenToLS = (refreshToken: string) => {
   localStorage.setItem('refreshToken', refreshToken)
