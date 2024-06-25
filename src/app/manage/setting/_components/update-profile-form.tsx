@@ -3,6 +3,7 @@
 import { Upload } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -11,8 +12,11 @@ import { Label } from '@/components/ui/label'
 import { UpdateMeBody, UpdateMeBodyType } from '@/schemaValidations/account.schema'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useAccountProfileQuery } from '@/hooks'
 
 export function UpdateProfileForm() {
+  const [file, setFile] = useState<File | null>(null)
+
   const form = useForm<UpdateMeBodyType>({
     resolver: zodResolver(UpdateMeBody),
     defaultValues: {
@@ -20,6 +24,30 @@ export function UpdateProfileForm() {
       avatar: ''
     }
   })
+
+  const { data } = useAccountProfileQuery()
+
+  useEffect(() => {
+    if (data) {
+      const { avatar, name } = data.payload.data
+
+      form.reset({
+        name,
+        avatar: avatar ?? ''
+      })
+    }
+  }, [data, form])
+
+  const watchAvatar = form.watch('avatar')
+  const watchName = form.watch('name')
+
+  const previewAvatar = useMemo(() => {
+    if (file) {
+      return URL.createObjectURL(file)
+    }
+
+    return watchAvatar
+  }, [watchAvatar, file])
 
   return (
     <Form {...form}>
@@ -37,17 +65,29 @@ export function UpdateProfileForm() {
                   <FormItem>
                     <div className="flex gap-2 items-start justify-start">
                       <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
-                        <AvatarImage src={'Duoc'} />
-                        <AvatarFallback className="rounded-none">{'duoc'}</AvatarFallback>
+                        <AvatarImage src={previewAvatar} />
+                        <AvatarFallback className="rounded-none">{watchName}</AvatarFallback>
                       </Avatar>
-                      <input type="file" accept="image/*" className="hidden" />
-                      <button
-                        className="flex aspect-square w-[100px] items-center justify-center rounded-md border border-dashed"
-                        type="button"
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        id="profile-image"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          if (file) {
+                            setFile(file)
+                          }
+                        }}
+                      />
+
+                      <label
+                        htmlFor="profile-image"
+                        className="flex aspect-square w-[100px] items-center justify-center rounded-md border border-dashed hover:cursor-pointer"
                       >
                         <Upload className="h-4 w-4 text-muted-foreground" />
                         <span className="sr-only">Upload</span>
-                      </button>
+                      </label>
                     </div>
                   </FormItem>
                 )}
