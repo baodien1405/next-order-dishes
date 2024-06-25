@@ -1,5 +1,5 @@
 import { http } from '@/lib/http'
-import { AccountResType, UpdateMeBodyType } from '@/schemaValidations/account.schema'
+import { AccountResType, ChangePasswordBodyType, UpdateMeBodyType } from '@/schemaValidations/account.schema'
 
 export const accountService = {
   me() {
@@ -8,5 +8,9 @@ export const accountService = {
 
   updateMe(body: UpdateMeBodyType) {
     return http.put<AccountResType>('/accounts/me', body)
+  },
+
+  changePassword(body: ChangePasswordBodyType) {
+    return http.put<AccountResType>('/accounts/change-password', body)
   }
 }

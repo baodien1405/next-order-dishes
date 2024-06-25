@@ -9,8 +9,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ChangePasswordBody, ChangePasswordBodyType } from '@/schemaValidations/account.schema'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { useChangePasswordMutation } from '@/hooks'
+import { handleErrorApi } from '@/lib/utils'
+import { useToast } from '@/components/ui/use-toast'
 
 export function ChangePasswordForm() {
+  const toast = useToast()
+  const changePasswordMutation = useChangePasswordMutation()
+
   const form = useForm<ChangePasswordBodyType>({
     resolver: zodResolver(ChangePasswordBody),
     defaultValues: {
@@ -20,9 +26,25 @@ export function ChangePasswordForm() {
     }
   })
 
+  const onSubmit = async (formValues: ChangePasswordBodyType) => {
+    if (changePasswordMutation.isPending) return
+
+    try {
+      const response = await changePasswordMutation.mutateAsync(formValues)
+      toast.toast({ description: response.payload.message })
+    } catch (error) {
+      handleErrorApi({ error, setError: form.setError })
+    }
+  }
+
   return (
     <Form {...form}>
-      <form noValidate className="grid auto-rows-max items-start gap-4 md:gap-8">
+      <form
+        noValidate
+        className="grid auto-rows-max items-start gap-4 md:gap-8"
+        onSubmit={form.handleSubmit(onSubmit)}
+        onReset={() => form.reset()}
+      >
         <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
           <CardHeader>
             <CardTitle>Đổi mật khẩu</CardTitle>
@@ -70,10 +92,12 @@ export function ChangePasswordForm() {
                 )}
               />
               <div className=" items-center gap-2 md:ml-auto flex">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" type="reset">
                   Hủy
                 </Button>
-                <Button size="sm">Lưu thông tin</Button>
+                <Button size="sm" type="submit">
+                  Lưu thông tin
+                </Button>
               </div>
             </div>
           </CardContent>
