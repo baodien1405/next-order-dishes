@@ -9,12 +9,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useToast } from '@/components/ui/use-toast'
 import { UpdateMeBody, UpdateMeBodyType } from '@/schemaValidations/account.schema'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useAccountProfileQuery } from '@/hooks'
+import { useAccountMeQuery, useUpdateMeMutation, useUploadMediaMutation } from '@/hooks'
+import { handleErrorApi } from '@/lib/utils'
 
 export function UpdateProfileForm() {
+  const toast = useToast()
   const [file, setFile] = useState<File | null>(null)
 
   const form = useForm<UpdateMeBodyType>({
@@ -25,7 +28,9 @@ export function UpdateProfileForm() {
     }
   })
 
-  const { data } = useAccountProfileQuery()
+  const { data, refetch } = useAccountMeQuery()
+  const uploadMediaMutation = useUploadMediaMutation()
+  const updateMeMutation = useUpdateMeMutation()
 
   useEffect(() => {
     if (data) {
@@ -49,9 +54,36 @@ export function UpdateProfileForm() {
     return watchAvatar
   }, [watchAvatar, file])
 
+  const onSubmit = async (formValues: UpdateMeBodyType) => {
+    if (updateMeMutation.isPending) return
+
+    try {
+      let payload = formValues
+
+      if (file) {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const result = await uploadMediaMutation.mutateAsync(formData)
+        const imageUrl = result.payload.data
+
+        payload = {
+          ...formValues,
+          avatar: imageUrl
+        }
+      }
+
+      const response = await updateMeMutation.mutateAsync(payload)
+      toast.toast({ description: response.payload.message })
+      refetch()
+    } catch (error) {
+      handleErrorApi({ error, setError: form.setError })
+    }
+  }
+
   return (
     <Form {...form}>
-      <form noValidate className="grid auto-rows-max items-start gap-4 md:gap-8">
+      <form noValidate className="grid auto-rows-max items-start gap-4 md:gap-8" onSubmit={form.handleSubmit(onSubmit)}>
         <Card x-chunk="dashboard-07-chunk-0">
           <CardHeader>
             <CardTitle>Thông tin cá nhân</CardTitle>
@@ -77,6 +109,7 @@ export function UpdateProfileForm() {
                           const file = e.target.files?.[0]
                           if (file) {
                             setFile(file)
+                            field.onChange(`http://localhost:3000/${field.name}`)
                           }
                         }}
                       />

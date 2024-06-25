@@ -16,12 +16,12 @@ import { Button } from '@/components/ui/button'
 import { handleErrorApi } from '@/lib/utils'
 import { useLogoutMutation } from '@/hooks'
 import { path } from '@/constants'
-import { useAccountProfileQuery } from '@/hooks'
+import { useAccountMeQuery } from '@/hooks'
 
 export function DropdownAvatar() {
   const router = useRouter()
   const logoutMutation = useLogoutMutation()
-  const { data } = useAccountProfileQuery()
+  const { data } = useAccountMeQuery()
   const profile = data?.payload.data
 
   const handleLogout = async () => {

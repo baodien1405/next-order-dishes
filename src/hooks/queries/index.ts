@@ -1,1 +1,1 @@
-export * from './useAccountProfileQuery'
+export * from './useAccountMeQuery'
