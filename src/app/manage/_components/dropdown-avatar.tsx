@@ -16,15 +16,13 @@ import { Button } from '@/components/ui/button'
 import { handleErrorApi } from '@/lib/utils'
 import { useLogoutMutation } from '@/hooks'
 import { path } from '@/constants'
-
-const account = {
-  name: 'Nguyễn Văn A',
-  avatar: 'https://i.pravatar.cc/150'
-}
+import { useAccountProfileQuery } from '@/hooks'
 
 export function DropdownAvatar() {
   const router = useRouter()
   const logoutMutation = useLogoutMutation()
+  const { data } = useAccountProfileQuery()
+  const profile = data?.payload.data
 
   const handleLogout = async () => {
     if (logoutMutation.isPending) return
@@ -42,13 +40,13 @@ export function DropdownAvatar() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
           <Avatar>
-            <AvatarImage src={account.avatar ?? undefined} alt={account.name} />
-            <AvatarFallback>{account.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+            <AvatarImage src={profile?.avatar ?? undefined} alt={profile?.name} />
+            <AvatarFallback>{profile?.name.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>{account.name}</DropdownMenuLabel>
+        <DropdownMenuLabel>{profile?.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href={'/manage/setting'} className="cursor-pointer">
