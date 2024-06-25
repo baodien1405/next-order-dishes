@@ -1,5 +1,5 @@
 import { http } from '@/lib/http'
-import { LoginBodyType, LoginResType } from '@/schemaValidations/auth.schema'
+import { LoginBodyType, LoginResType, LogoutBodyType } from '@/schemaValidations/auth.schema'
 
 export const authService = {
   sLogin(body: LoginBodyType) {
@@ -8,6 +8,24 @@ export const authService = {
 
   login(body: LoginBodyType) {
     return http.post<LoginResType>('/api/auth/login', body, {
+      baseUrl: ''
+    })
+  },
+
+  sLogout(body: LogoutBodyType & { accessToken: string }) {
+    return http.post(
+      '/auth/logout',
+      { refreshToken: body.refreshToken },
+      {
+        headers: {
+          Authorization: `Bearer ${body.accessToken}`
+        }
+      }
+    )
+  },
+
+  logout() {
+    return http.post('/api/auth/logout', null, {
       baseUrl: ''
     })
   }
