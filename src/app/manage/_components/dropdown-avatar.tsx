@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import {
   DropdownMenu,
@@ -12,6 +13,9 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { handleErrorApi } from '@/lib/utils'
+import { useLogoutMutation } from '@/hooks'
+import { path } from '@/constants'
 
 const account = {
   name: 'Nguyễn Văn A',
@@ -19,6 +23,20 @@ const account = {
 }
 
 export function DropdownAvatar() {
+  const router = useRouter()
+  const logoutMutation = useLogoutMutation()
+
+  const handleLogout = async () => {
+    if (logoutMutation.isPending) return
+
+    try {
+      await logoutMutation.mutateAsync()
+      router.push(path.HOME)
+    } catch (error) {
+      handleErrorApi({ error })
+    }
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,7 +57,7 @@ export function DropdownAvatar() {
         </DropdownMenuItem>
         <DropdownMenuItem>Hỗ trợ</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Đăng xuất</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>Đăng xuất</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

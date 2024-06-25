@@ -1,3 +1,4 @@
 export const MutationKeys = {
-  LOGIN: 'LOGIN'
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT'
 }

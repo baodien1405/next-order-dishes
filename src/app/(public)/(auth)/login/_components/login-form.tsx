@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,8 +13,10 @@ import { LoginBody, LoginBodyType } from '@/schemaValidations/auth.schema'
 import { useLoginMutation } from '@/hooks'
 import { handleErrorApi } from '@/lib/utils'
 import { useToast } from '@/components/ui/use-toast'
+import { path } from '@/constants'
 
 export function LoginForm() {
+  const router = useRouter()
   const toast = useToast()
   const loginMutation = useLoginMutation()
   const form = useForm<LoginBodyType>({
@@ -25,12 +28,15 @@ export function LoginForm() {
   })
 
   const onSubmit = (payload: LoginBodyType) => {
+    if (loginMutation.isPending) return
+
     try {
       loginMutation.mutateAsync(payload, {
         onSuccess: (data) => {
           toast.toast({
             description: data.payload.message
           })
+          router.push(path.MANAGE_DASHBOARD)
         }
       })
     } catch (error) {
