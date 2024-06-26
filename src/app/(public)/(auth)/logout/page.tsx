@@ -1,0 +1,33 @@
+'use client'
+
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useRef } from 'react'
+
+import { path } from '@/constants'
+import { useLogoutMutation } from '@/hooks'
+import { getRefreshTokenFromLS } from '@/lib/common'
+
+export default function Logout() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const logoutRequestRef = useRef<any>(null)
+  const timeoutRef = useRef<any>(null)
+  const { mutateAsync } = useLogoutMutation()
+
+  useEffect(() => {
+    if (logoutRequestRef.current || searchParams.get('refreshToken') !== getRefreshTokenFromLS()) return
+
+    logoutRequestRef.current = mutateAsync
+
+    mutateAsync().then(() => {
+      timeoutRef.current = setTimeout(() => {
+        logoutRequestRef.current = null
+      }, 1000)
+      router.push(path.LOGIN)
+    })
+
+    return clearTimeout(timeoutRef.current)
+  }, [mutateAsync, router, searchParams])
+
+  return <div>Logout...</div>
+}
