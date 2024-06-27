@@ -5,17 +5,27 @@ import { useEffect, useRef } from 'react'
 
 import { path } from '@/constants'
 import { useLogoutMutation } from '@/hooks'
-import { getRefreshTokenFromLS } from '@/lib/common'
+import { getAccessTokenFromLS, getRefreshTokenFromLS } from '@/lib/common'
 
 export default function Logout() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const logoutRequestRef = useRef<any>(null)
   const timeoutRef = useRef<any>(null)
+
+  const refreshTokenFromUrl = searchParams.get('refreshToken')
+  const accessTokenFromUrl = searchParams.get('accessToken')
+
   const { mutateAsync } = useLogoutMutation()
 
   useEffect(() => {
-    if (logoutRequestRef.current || searchParams.get('refreshToken') !== getRefreshTokenFromLS()) return
+    if (
+      logoutRequestRef.current ||
+      (refreshTokenFromUrl && refreshTokenFromUrl !== getRefreshTokenFromLS()) ||
+      (accessTokenFromUrl && accessTokenFromUrl !== getAccessTokenFromLS())
+    ) {
+      return
+    }
 
     logoutRequestRef.current = mutateAsync
 
@@ -27,7 +37,7 @@ export default function Logout() {
     })
 
     return clearTimeout(timeoutRef.current)
-  }, [mutateAsync, router, searchParams])
+  }, [mutateAsync, router, refreshTokenFromUrl, accessTokenFromUrl])
 
   return <div>Logout...</div>
 }
