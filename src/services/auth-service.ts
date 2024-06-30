@@ -44,7 +44,7 @@ export const authService = {
 
   async refreshToken() {
     if (this.refreshTokenRequest) {
-      this.refreshTokenRequest
+      return this.refreshTokenRequest
     }
 
     this.refreshTokenRequest = http.post<RefreshTokenResType>('/api/auth/refresh-token', null, {
