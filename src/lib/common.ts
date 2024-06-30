@@ -3,7 +3,9 @@ import { isClient } from '@/lib/http'
 export const getAccessTokenFromLS = () => (isClient ? localStorage.getItem('accessToken') : null)
 
 export const setAccessTokenToLS = (accessToken: string) => {
-  localStorage.setItem('accessToken', accessToken)
+  if (isClient) {
+    localStorage.setItem('accessToken', accessToken)
+  }
 }
 
 export const removeAccessTokenToLS = () => {
@@ -13,7 +15,9 @@ export const removeAccessTokenToLS = () => {
 export const getRefreshTokenFromLS = () => (isClient ? localStorage.getItem('refreshToken') : null)
 
 export const setRefreshTokenToLS = (refreshToken: string) => {
-  localStorage.setItem('refreshToken', refreshToken)
+  if (isClient) {
+    localStorage.setItem('refreshToken', refreshToken)
+  }
 }
 
 export const removeRefreshTokenToLS = () => {
@@ -23,7 +27,9 @@ export const removeRefreshTokenToLS = () => {
 export const getUserFromLS = () => localStorage.getItem('user')
 
 export const setUserToLS = (user: any) => {
-  localStorage.setItem('user', JSON.stringify(user))
+  if (isClient) {
+    localStorage.setItem('user', JSON.stringify(user))
+  }
 }
 
 export const removeUserToLS = () => {
