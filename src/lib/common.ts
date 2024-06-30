@@ -9,7 +9,9 @@ export const setAccessTokenToLS = (accessToken: string) => {
 }
 
 export const removeAccessTokenToLS = () => {
-  localStorage.removeItem('accessToken')
+  if (isClient) {
+    localStorage.removeItem('accessToken')
+  }
 }
 
 export const getRefreshTokenFromLS = () => (isClient ? localStorage.getItem('refreshToken') : null)
@@ -21,10 +23,12 @@ export const setRefreshTokenToLS = (refreshToken: string) => {
 }
 
 export const removeRefreshTokenToLS = () => {
-  localStorage.removeItem('refreshToken')
+  if (isClient) {
+    localStorage.removeItem('refreshToken')
+  }
 }
 
-export const getUserFromLS = () => localStorage.getItem('user')
+export const getUserFromLS = () => (isClient ? localStorage.getItem('user') : null)
 
 export const setUserToLS = (user: any) => {
   if (isClient) {
@@ -33,5 +37,7 @@ export const setUserToLS = (user: any) => {
 }
 
 export const removeUserToLS = () => {
-  localStorage.removeItem('user')
+  if (isClient) {
+    localStorage.removeItem('user')
+  }
 }

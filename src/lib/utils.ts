@@ -5,7 +5,14 @@ import { jwtDecode } from 'jwt-decode'
 
 import { EntityError } from '@/lib/http'
 import { toast } from '@/components/ui/use-toast'
-import { getAccessTokenFromLS, getRefreshTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS } from '@/lib/common'
+import {
+  getAccessTokenFromLS,
+  getRefreshTokenFromLS,
+  removeAccessTokenToLS,
+  removeRefreshTokenToLS,
+  setAccessTokenToLS,
+  setRefreshTokenToLS
+} from '@/lib/common'
 import { authService } from '@/services'
 
 export function cn(...inputs: ClassValue[]) {
@@ -55,7 +62,16 @@ export const checkAndRefreshToken = async (params?: { onSuccess?: () => void; on
 
   const isExpiredRefreshToken = decodeRefreshToken.exp <= now
 
-  if (isExpiredRefreshToken) return
+  if (isExpiredRefreshToken) {
+    removeAccessTokenToLS()
+    removeRefreshTokenToLS()
+
+    if (params?.onError) {
+      params.onError()
+    }
+
+    return
+  }
 
   const remainingAccessTokenTime = decodeAccessToken.exp - now
   const validAccessTokenDuration = decodeAccessToken.exp - decodeAccessToken.iat
