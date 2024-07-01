@@ -10,6 +10,7 @@ import {
   setAccessTokenToLS,
   setRefreshTokenToLS
 } from '@/lib/common'
+import { path } from '@/constants'
 
 const ENTITY_ERROR_STATUS = 422
 const AUTHENTICATION_ERROR_STATUS = 401
@@ -122,12 +123,12 @@ const request = async <Response>(
             removeAccessTokenToLS()
             removeRefreshTokenToLS()
             clientLogoutRequest = null
-            location.href = '/login'
+            location.href = path.LOGIN
           }
         }
       } else {
         const accessToken = (options?.headers as any)?.Authorization.split('Bearer ')[1]
-        redirect(`/logout?accessToken=${accessToken}`)
+        redirect(`${path.LOGOUT}?accessToken=${accessToken}`)
       }
     } else {
       throw new HttpError(data)

@@ -46,7 +46,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     <AppContext.Provider value={{ isAuth, setIsAuth }}>
       <QueryClientProvider client={queryClient}>
         {children}
-
         <RefreshToken />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

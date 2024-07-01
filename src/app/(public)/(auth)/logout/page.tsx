@@ -40,7 +40,7 @@ export default function LogoutPage() {
     }
 
     return () => clearTimeout(timeoutRef.current)
-  }, [mutateAsync, router, refreshTokenFromUrl, accessTokenFromUrl])
+  }, [mutateAsync, router, refreshTokenFromUrl, accessTokenFromUrl, setIsAuth])
 
   return <div>Logout...</div>
 }
