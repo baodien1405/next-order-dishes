@@ -1,9 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 
-import { getAccessTokenFromLS } from '@/lib/common'
+import { useAppContext } from '@/providers'
 
 const menuItems = [
   {
@@ -28,14 +27,10 @@ const menuItems = [
 ]
 
 export default function NavItems({ className }: { className?: string }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  useEffect(() => {
-    setIsAuthenticated(Boolean(getAccessTokenFromLS()))
-  }, [])
+  const { isAuth } = useAppContext()
 
   return menuItems.map((item) => {
-    if ((item.authRequired === true && !isAuthenticated) || (item.authRequired === false && isAuthenticated)) {
+    if ((item.authRequired === true && !isAuth) || (item.authRequired === false && isAuth)) {
       return null
     }
 

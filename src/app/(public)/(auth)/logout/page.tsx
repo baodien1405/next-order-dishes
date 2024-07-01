@@ -20,23 +20,24 @@ export default function Logout() {
 
   useEffect(() => {
     if (
-      logoutRequestRef.current ||
-      (refreshTokenFromUrl && refreshTokenFromUrl !== getRefreshTokenFromLS()) ||
-      (accessTokenFromUrl && accessTokenFromUrl !== getAccessTokenFromLS())
+      !logoutRequestRef.current &&
+      ((refreshTokenFromUrl && refreshTokenFromUrl === getRefreshTokenFromLS()) ||
+        (accessTokenFromUrl && accessTokenFromUrl === getAccessTokenFromLS()))
     ) {
-      return
+      logoutRequestRef.current = mutateAsync
+
+      mutateAsync().then(() => {
+        timeoutRef.current = setTimeout(() => {
+          logoutRequestRef.current = null
+        }, 1000)
+
+        router.push(path.LOGIN)
+      })
+    } else {
+      router.push(path.HOME)
     }
 
-    logoutRequestRef.current = mutateAsync
-
-    mutateAsync().then(() => {
-      timeoutRef.current = setTimeout(() => {
-        logoutRequestRef.current = null
-      }, 1000)
-      router.push(path.LOGIN)
-    })
-
-    return clearTimeout(timeoutRef.current)
+    return () => clearTimeout(timeoutRef.current)
   }, [mutateAsync, router, refreshTokenFromUrl, accessTokenFromUrl])
 
   return <div>Logout...</div>

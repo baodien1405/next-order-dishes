@@ -1,8 +1,9 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,10 +15,14 @@ import { useLoginMutation } from '@/hooks'
 import { handleErrorApi } from '@/lib/utils'
 import { useToast } from '@/components/ui/use-toast'
 import { path } from '@/constants'
+import { useAppContext } from '@/providers'
 
 export function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const clearTokens = searchParams.get('clearTokens')
   const toast = useToast()
+  const { setIsAuth } = useAppContext()
   const loginMutation = useLoginMutation()
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -26,6 +31,12 @@ export function LoginForm() {
       password: ''
     }
   })
+
+  useEffect(() => {
+    if (clearTokens) {
+      setIsAuth(false)
+    }
+  }, [clearTokens, setIsAuth])
 
   const onSubmit = (payload: LoginBodyType) => {
     if (loginMutation.isPending) return

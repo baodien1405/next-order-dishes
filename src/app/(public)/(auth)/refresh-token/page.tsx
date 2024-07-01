@@ -20,6 +20,8 @@ export default function RefreshTokenPage() {
           router.push(redirectPath || path.HOME)
         }
       })
+    } else {
+      router.push(path.HOME)
     }
   }, [redirectPath, refreshTokenFromUrl, router])
 

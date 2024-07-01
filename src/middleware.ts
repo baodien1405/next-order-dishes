@@ -12,7 +12,11 @@ export function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get('refreshToken')?.value
 
   if (privatePaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
-    return NextResponse.redirect(new URL(path.LOGIN, request.url))
+    const url = new URL(path.LOGIN, request.url)
+
+    url.searchParams.set('clearTokens', 'true')
+
+    return NextResponse.redirect(url)
   }
 
   if (authPaths.some((path) => pathname.startsWith(path)) && refreshToken) {
