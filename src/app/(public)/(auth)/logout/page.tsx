@@ -6,8 +6,9 @@ import { useEffect, useRef } from 'react'
 import { path } from '@/constants'
 import { useLogoutMutation } from '@/hooks'
 import { getAccessTokenFromLS, getRefreshTokenFromLS } from '@/lib/common'
+import { useAppContext } from '@/providers'
 
-export default function Logout() {
+export default function LogoutPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const logoutRequestRef = useRef<any>(null)
@@ -16,6 +17,7 @@ export default function Logout() {
   const refreshTokenFromUrl = searchParams.get('refreshToken')
   const accessTokenFromUrl = searchParams.get('accessToken')
 
+  const { setIsAuth } = useAppContext()
   const { mutateAsync } = useLogoutMutation()
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export default function Logout() {
         timeoutRef.current = setTimeout(() => {
           logoutRequestRef.current = null
         }, 1000)
-
+        setIsAuth(false)
         router.push(path.LOGIN)
       })
     } else {

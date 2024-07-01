@@ -44,6 +44,7 @@ export function LoginForm() {
     try {
       loginMutation.mutateAsync(payload, {
         onSuccess: (data) => {
+          setIsAuth(true)
           toast.toast({
             description: data.payload.message
           })

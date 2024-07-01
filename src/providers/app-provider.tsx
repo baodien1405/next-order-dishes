@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import RefreshToken from '@/components/refresh-token'
-import { removeAccessTokenToLS, removeRefreshTokenToLS } from '@/lib/common'
+import { getAccessTokenFromLS, removeAccessTokenToLS, removeRefreshTokenToLS } from '@/lib/common'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +30,7 @@ export const useAppContext = () => {
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [isAuth, setIsAuthState] = useState(false)
+  const [isAuth, setIsAuthState] = useState(() => Boolean(getAccessTokenFromLS()))
 
   const setIsAuth = useCallback((isAuthenticated: boolean) => {
     if (isAuthenticated) {

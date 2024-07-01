@@ -1,7 +1,7 @@
 import { ChangePasswordForm, UpdateProfileForm } from '@/app/manage/setting/_components'
 import { Badge } from '@/components/ui/badge'
 
-export default function Setting() {
+export default function SettingPage() {
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="mx-auto grid w-full flex-1 auto-rows-max gap-4">
