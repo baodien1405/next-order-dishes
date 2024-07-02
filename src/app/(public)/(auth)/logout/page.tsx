@@ -1,14 +1,14 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 
 import { path } from '@/constants'
 import { useLogoutMutation } from '@/hooks'
 import { getAccessTokenFromLS, getRefreshTokenFromLS } from '@/lib/common'
 import { useAppContext } from '@/providers'
 
-export default function LogoutPage() {
+function Logout() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const logoutRequestRef = useRef<any>(null)
@@ -43,4 +43,12 @@ export default function LogoutPage() {
   }, [mutateAsync, router, refreshTokenFromUrl, accessTokenFromUrl, setIsAuth])
 
   return <div>Logout...</div>
+}
+
+export default function LogoutPage() {
+  return (
+    <Suspense>
+      <Logout />
+    </Suspense>
+  )
 }
