@@ -12,7 +12,8 @@ export const useUpdateAccountMutation = () => {
     mutationFn: ({ id, ...body }: UpdateEmployeeAccountBodyType & { id: number }) => accountService.update(id, body),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.ACCOUNT_LIST]
+        queryKey: [QueryKeys.ACCOUNT_LIST],
+        exact: true
       })
     }
   })

@@ -6,6 +6,7 @@ import { QueryKeys } from '@/constants'
 export const useAccountDetailQuery = (accountId: number) => {
   return useQuery({
     queryKey: [QueryKeys.ACCOUNT_DETAIL, accountId],
-    queryFn: () => accountService.get(accountId)
+    queryFn: () => accountService.get(accountId),
+    enabled: Boolean(accountId)
   })
 }

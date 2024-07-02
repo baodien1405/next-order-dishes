@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Upload } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -19,7 +19,10 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useToast } from '@/components/ui/use-toast'
 import { UpdateEmployeeAccountBody, UpdateEmployeeAccountBodyType } from '@/schemaValidations/account.schema'
+import { useAccountDetailQuery, useUpdateAccountMutation, useUploadMediaMutation } from '@/hooks'
+import { handleErrorApi } from '@/lib/utils'
 
 export function EditEmployee({
   id,
@@ -30,8 +33,14 @@ export function EditEmployee({
   setId: (value: number | undefined) => void
   onSubmitSuccess?: () => void
 }) {
+  const toast = useToast()
   const [file, setFile] = useState<File | null>(null)
   const avatarInputRef = useRef<HTMLInputElement | null>(null)
+
+  const { data } = useAccountDetailQuery(id as number)
+  const updateAccountMutation = useUpdateAccountMutation()
+  const uploadMediaMutation = useUploadMediaMutation()
+
   const form = useForm<UpdateEmployeeAccountBodyType>({
     resolver: zodResolver(UpdateEmployeeAccountBody),
     defaultValues: {
@@ -43,15 +52,59 @@ export function EditEmployee({
       changePassword: false
     }
   })
+
   const avatar = form.watch('avatar')
   const name = form.watch('name')
   const changePassword = form.watch('changePassword')
+
   const previewAvatarFromFile = useMemo(() => {
     if (file) {
       return URL.createObjectURL(file)
     }
     return avatar
   }, [file, avatar])
+
+  useEffect(() => {
+    if (data) {
+      const { avatar, name, email } = data.payload.data
+      form.reset({
+        name,
+        email,
+        avatar: avatar ?? undefined,
+        password: form.getValues('password'),
+        confirmPassword: form.getValues('confirmPassword'),
+        changePassword: form.getValues('changePassword')
+      })
+    }
+  }, [data, form])
+
+  const handleUpdateAccount = async (formValues: UpdateEmployeeAccountBodyType) => {
+    if (updateAccountMutation.isPending) return
+
+    try {
+      let payload: UpdateEmployeeAccountBodyType & { id: number } = { ...formValues, id: id as number }
+
+      if (file) {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const result = await uploadMediaMutation.mutateAsync(formData)
+        const imageUrl = result.payload.data
+
+        payload = {
+          ...payload,
+          avatar: imageUrl
+        }
+      }
+
+      const response = await updateAccountMutation.mutateAsync(payload)
+      toast.toast({ description: response.payload.message })
+      onSubmitSuccess?.()
+      setId(undefined)
+    } catch (error) {
+      handleErrorApi({ error, setError: form.setError })
+    }
+  }
 
   return (
     <Dialog
@@ -67,8 +120,14 @@ export function EditEmployee({
           <DialogTitle>Cập nhật tài khoản</DialogTitle>
           <DialogDescription>Các trường tên, email, mật khẩu là bắt buộc</DialogDescription>
         </DialogHeader>
+
         <Form {...form}>
-          <form noValidate className="grid auto-rows-max items-start gap-4 md:gap-8" id="edit-employee-form">
+          <form
+            noValidate
+            className="grid auto-rows-max items-start gap-4 md:gap-8"
+            id="edit-employee-form"
+            onSubmit={form.handleSubmit(handleUpdateAccount)}
+          >
             <div className="grid gap-4 py-4">
               <FormField
                 control={form.control}
@@ -151,6 +210,7 @@ export function EditEmployee({
                   </FormItem>
                 )}
               />
+
               {changePassword && (
                 <FormField
                   control={form.control}
@@ -168,6 +228,7 @@ export function EditEmployee({
                   )}
                 />
               )}
+
               {changePassword && (
                 <FormField
                   control={form.control}
@@ -188,6 +249,7 @@ export function EditEmployee({
             </div>
           </form>
         </Form>
+
         <DialogFooter>
           <Button type="submit" form="edit-employee-form">
             Lưu
