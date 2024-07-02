@@ -42,6 +42,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import AutoPagination from '@/components/auto-pagination'
 import { AddEmployee, EditEmployee } from '@/app/manage/accounts/_components'
+import { useAccountListQuery } from '@/hooks'
 
 type AccountItem = AccountListResType['data'][0]
 
@@ -88,8 +89,7 @@ export const columns: ColumnDef<AccountType>[] = [
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>
+    }
   },
   {
     id: 'actions',
@@ -164,7 +164,8 @@ export function AccountTable() {
   // const params = Object.fromEntries(searchParam.entries())
   const [employeeIdEdit, setEmployeeIdEdit] = useState<number | undefined>()
   const [employeeDelete, setEmployeeDelete] = useState<AccountItem | null>(null)
-  const data: any[] = []
+  const accountListQuery = useAccountListQuery()
+  const data = accountListQuery.data?.payload.data || []
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
