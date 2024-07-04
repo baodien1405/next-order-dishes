@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Upload } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -20,10 +20,12 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
 
-import { getVietnameseDishStatus } from '@/lib/utils'
+import { getVietnameseDishStatus, handleErrorApi } from '@/lib/utils'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UpdateDishBody, UpdateDishBodyType } from '@/schemaValidations/dish.schema'
 import { DishStatus, DishStatusValues } from '@/constants/type'
+import { useToast } from '@/components/ui/use-toast'
+import { useDishDetailQuery, useUpdateDishMutation, useUploadMediaMutation } from '@/hooks'
 
 export function EditDish({
   id,
@@ -34,15 +36,21 @@ export function EditDish({
   setId: (value: number | undefined) => void
   onSubmitSuccess?: () => void
 }) {
+  const toast = useToast()
   const [file, setFile] = useState<File | null>(null)
   const imageInputRef = useRef<HTMLInputElement | null>(null)
+
+  const { data } = useDishDetailQuery(id as number)
+  const updateDishMutation = useUpdateDishMutation()
+  const uploadMediaMutation = useUploadMediaMutation()
+
   const form = useForm<UpdateDishBodyType>({
     resolver: zodResolver(UpdateDishBody),
     defaultValues: {
       name: '',
       description: '',
       price: 0,
-      image: '',
+      image: undefined,
       status: DishStatus.Unavailable
     }
   })
@@ -57,12 +65,58 @@ export function EditDish({
     return image
   }, [file, image])
 
+  useEffect(() => {
+    if (data) {
+      const { name, image, price, description, status } = data.payload.data
+      form.reset({
+        name,
+        price,
+        image: image ?? undefined,
+        description,
+        status
+      })
+    }
+  }, [data, form])
+
+  const handleUpdateDish = async (formValues: UpdateDishBodyType) => {
+    if (updateDishMutation.isPending) return
+
+    try {
+      let payload: UpdateDishBodyType & { id: number } = { ...formValues, id: id as number }
+
+      if (file) {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const result = await uploadMediaMutation.mutateAsync(formData)
+        const imageUrl = result.payload.data
+
+        payload = {
+          ...payload,
+          image: imageUrl
+        }
+      }
+
+      const response = await updateDishMutation.mutateAsync(payload)
+      toast.toast({ description: response.payload.message })
+      onSubmitSuccess?.()
+      reset()
+    } catch (error) {
+      handleErrorApi({ error, setError: form.setError })
+    }
+  }
+
+  const reset = () => {
+    setId(undefined)
+    setFile(null)
+  }
+
   return (
     <Dialog
       open={Boolean(id)}
       onOpenChange={(value) => {
         if (!value) {
-          setId(undefined)
+          reset()
         }
       }}
     >
@@ -71,8 +125,15 @@ export function EditDish({
           <DialogTitle>Cập nhật món ăn</DialogTitle>
           <DialogDescription>Các trường sau đây là bắ buộc: Tên, ảnh</DialogDescription>
         </DialogHeader>
+
         <Form {...form}>
-          <form noValidate className="grid auto-rows-max items-start gap-4 md:gap-8" id="edit-dish-form">
+          <form
+            noValidate
+            className="grid auto-rows-max items-start gap-4 md:gap-8"
+            id="edit-dish-form"
+            onSubmit={form.handleSubmit(handleUpdateDish, console.log)}
+            onReset={reset}
+          >
             <div className="grid gap-4 py-4">
               <FormField
                 control={form.control}
@@ -163,12 +224,13 @@ export function EditDish({
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
                       <Label htmlFor="description">Trạng thái</Label>
                       <div className="col-span-3 w-full space-y-2">
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Chọn trạng thái" />
                             </SelectTrigger>
                           </FormControl>
+
                           <SelectContent>
                             {DishStatusValues.map((status) => (
                               <SelectItem key={status} value={status}>
