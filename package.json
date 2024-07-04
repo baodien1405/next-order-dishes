@@ -1,6 +1,6 @@
 {
   "name": "next-order-dishes",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -26,6 +26,7 @@
     "@tanstack/react-table": "^8.19.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "dompurify": "^3.1.5",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.396.0",
     "next": "14.2.4",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.43.1",
+    "@types/dompurify": "^3.0.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
