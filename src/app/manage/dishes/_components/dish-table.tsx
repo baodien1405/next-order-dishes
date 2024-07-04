@@ -39,11 +39,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
-import { formatCurrency, getVietnameseDishStatus } from '@/lib/utils'
+import { formatCurrency, getVietnameseDishStatus, handleErrorApi } from '@/lib/utils'
 import AutoPagination from '@/components/auto-pagination'
 import { DishListResType } from '@/schemaValidations/dish.schema'
 import { EditDish, AddDish } from '@/app/manage/dishes/_components'
-import { useDishListQuery } from '@/hooks'
+import { useDeleteDishMutation, useDishListQuery } from '@/hooks'
+import { useToast } from '@/components/ui/use-toast'
 
 type DishItem = DishListResType['data'][0]
 
@@ -106,6 +107,7 @@ export const columns: ColumnDef<DishItem>[] = [
     enableHiding: false,
     cell: function Actions({ row }) {
       const { setDishIdEdit, setDishDelete } = useContext(DishTableContext)
+
       const openEditDish = () => {
         setDishIdEdit(row.original.id)
       }
@@ -113,6 +115,7 @@ export const columns: ColumnDef<DishItem>[] = [
       const openDeleteDish = () => {
         setDishDelete(row.original)
       }
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -140,6 +143,23 @@ function AlertDialogDeleteDish({
   dishDelete: DishItem | null
   setDishDelete: (value: DishItem | null) => void
 }) {
+  const toast = useToast()
+  const deleteDishMutation = useDeleteDishMutation()
+
+  const handleDeleteDish = async () => {
+    if (dishDelete) {
+      if (deleteDishMutation.isPending) return
+
+      try {
+        const response = await deleteDishMutation.mutateAsync(dishDelete.id)
+        setDishDelete(null)
+        toast.toast({ description: response.payload.message })
+      } catch (error) {
+        handleErrorApi({ error })
+      }
+    }
+  }
+
   return (
     <AlertDialog
       open={Boolean(dishDelete)}
@@ -159,7 +179,7 @@ function AlertDialogDeleteDish({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleDeleteDish}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
