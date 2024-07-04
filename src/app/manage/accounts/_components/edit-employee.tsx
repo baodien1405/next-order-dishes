@@ -100,10 +100,15 @@ export function EditEmployee({
       const response = await updateAccountMutation.mutateAsync(payload)
       toast.toast({ description: response.payload.message })
       onSubmitSuccess?.()
-      setId(undefined)
+      reset()
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
     }
+  }
+
+  const reset = () => {
+    setId(undefined)
+    setFile(null)
   }
 
   return (
@@ -111,7 +116,7 @@ export function EditEmployee({
       open={Boolean(id)}
       onOpenChange={(value) => {
         if (!value) {
-          setId(undefined)
+          reset()
         }
       }}
     >
