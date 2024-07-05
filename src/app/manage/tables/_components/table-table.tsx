@@ -42,6 +42,8 @@ import { getVietnameseTableStatus } from '@/lib/utils'
 import AutoPagination from '@/components/auto-pagination'
 import { TableListResType } from '@/schemaValidations/table.schema'
 import { AddTable, EditTable } from '@/app/manage/tables/_components'
+import { useTableListQuery } from '@/hooks'
+import QRCodeTable from '@/components/qrcode-table'
 
 type TableItem = TableListResType['data'][0]
 
@@ -76,7 +78,7 @@ export const columns: ColumnDef<TableItem>[] = [
   {
     accessorKey: 'token',
     header: 'QR Code',
-    cell: ({ row }) => <div>{row.getValue('number')}</div>
+    cell: ({ row }) => <QRCodeTable tableNumber={row.getValue('number')} token={row.getValue('token')} />
   },
   {
     id: 'actions',
@@ -151,7 +153,8 @@ export function TableTable() {
   // const params = Object.fromEntries(searchParam.entries())
   const [tableIdEdit, setTableIdEdit] = useState<number | undefined>()
   const [tableDelete, setTableDelete] = useState<TableItem | null>(null)
-  const data: any[] = []
+  const tableListQuery = useTableListQuery()
+  const data = tableListQuery.data?.payload.data || []
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
