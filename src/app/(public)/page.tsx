@@ -1,7 +1,8 @@
+import Image from 'next/image'
+
 import { formatCurrency } from '@/lib/utils'
 import { DishListResType } from '@/schemaValidations/dish.schema'
 import { dishService } from '@/services'
-import Image from 'next/image'
 
 export default async function Home() {
   let dishList: DishListResType['data'] = []
@@ -10,7 +11,7 @@ export default async function Home() {
     const response = await dishService.getAll()
     dishList = response.payload?.data || []
   } catch (error) {
-    dishList = []
+    return <div>Something went wrong</div>
   }
 
   return (

@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { TableTable } from '@/app/manage/tables/_components'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -11,7 +13,9 @@ export default function TablesPage() {
             <CardDescription>Quản lý bàn ăn</CardDescription>
           </CardHeader>
           <CardContent>
-            <TableTable />
+            <Suspense>
+              <TableTable />
+            </Suspense>
           </CardContent>
         </Card>
       </div>
