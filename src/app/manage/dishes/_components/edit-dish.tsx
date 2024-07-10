@@ -26,6 +26,8 @@ import { UpdateDishBody, UpdateDishBodyType } from '@/schemaValidations/dish.sch
 import { DishStatus, DishStatusValues } from '@/constants/type'
 import { useToast } from '@/components/ui/use-toast'
 import { useDishDetailQuery, useUpdateDishMutation, useUploadMediaMutation } from '@/hooks'
+import { revalidateService } from '@/services'
+import { RevalidateTags } from '@/constants'
 
 export function EditDish({
   id,
@@ -98,6 +100,7 @@ export function EditDish({
       }
 
       const response = await updateDishMutation.mutateAsync(payload)
+      await revalidateService.revalidateTag(RevalidateTags.DISHES)
       toast.toast({ description: response.payload.message })
       onSubmitSuccess?.()
       reset()

@@ -27,6 +27,8 @@ import { CreateDishBody, CreateDishBodyType } from '@/schemaValidations/dish.sch
 import { DishStatus, DishStatusValues } from '@/constants/type'
 import { useAddDishMutation, useUploadMediaMutation } from '@/hooks'
 import { useToast } from '@/components/ui/use-toast'
+import { revalidateService } from '@/services'
+import { RevalidateTags } from '@/constants'
 
 export function AddDish() {
   const [file, setFile] = useState<File | null>(null)
@@ -81,6 +83,7 @@ export function AddDish() {
       }
 
       const response = await addDishMutation.mutateAsync(payload)
+      await revalidateService.revalidateTag(RevalidateTags.DISHES)
       toast.toast({ description: response.payload.message })
       handleResetAddDishForm()
       setOpen(false)

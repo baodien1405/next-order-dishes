@@ -1,3 +1,4 @@
+import { RevalidateTags } from '@/constants'
 import { http } from '@/lib/http'
 import { CreateDishBodyType, DishListResType, DishResType, UpdateDishBodyType } from '@/schemaValidations/dish.schema'
 
@@ -5,7 +6,7 @@ const PREFIX = '/dishes'
 
 export const dishService = {
   getAll() {
-    return http.get<DishListResType>(PREFIX)
+    return http.get<DishListResType>(PREFIX, { next: { tags: [RevalidateTags.DISHES] } })
   },
 
   get(id: number) {
