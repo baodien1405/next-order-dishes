@@ -5,12 +5,12 @@ import { path } from '@/constants'
 import { checkAndRefreshToken } from '@/lib/utils'
 import { useAppContext } from '@/providers'
 
-const UNAUTHENTICATED_PATH_LIST = [path.LOGIN, path.LOGOUT, path.REFRESH_TOKEN]
+const UNAUTHENTICATED_PATH_LIST: string[] = [path.LOGIN, path.LOGOUT, path.REFRESH_TOKEN]
 
 export default function RefreshToken() {
   const router = useRouter()
   const pathname = usePathname()
-  const { setIsAuth } = useAppContext()
+  const { setRole } = useAppContext()
 
   useEffect(() => {
     if (UNAUTHENTICATED_PATH_LIST.includes(pathname)) return
@@ -19,7 +19,7 @@ export default function RefreshToken() {
 
     const handleError = () => {
       clearInterval(interval)
-      setIsAuth(false)
+      setRole()
       router.push(path.LOGIN)
     }
 
@@ -32,7 +32,7 @@ export default function RefreshToken() {
     return () => {
       clearInterval(interval)
     }
-  }, [pathname, router, setIsAuth])
+  }, [pathname, router, setRole])
 
   return null
 }

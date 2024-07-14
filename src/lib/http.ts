@@ -138,11 +138,11 @@ const request = async <Response>(
   if (isClient) {
     const normalizeUrl = normalizePath(url)
 
-    if (normalizeUrl === 'api/auth/login') {
+    if (['api/auth/login', 'api/guest/auth/login'].includes(normalizeUrl)) {
       const { accessToken, refreshToken } = (payload as LoginResType).data
       setAccessTokenToLS(accessToken)
       setRefreshTokenToLS(refreshToken)
-    } else if (normalizeUrl === 'api/auth/logout') {
+    } else if (['api/auth/logout', 'api/guest/auth/logout'].includes(normalizeUrl)) {
       removeAccessTokenToLS()
       removeRefreshTokenToLS()
     }

@@ -1,11 +1,13 @@
 'use client'
 
-import { ReactNode, useContext, createContext, useState, useCallback } from 'react'
+import { jwtDecode } from 'jwt-decode'
+import { ReactNode, useContext, createContext, useState, useCallback, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import RefreshToken from '@/components/refresh-token'
 import { getAccessTokenFromLS, removeAccessTokenToLS, removeRefreshTokenToLS } from '@/lib/common'
+import { RoleType, TokenPayload } from '@/types'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,7 +20,8 @@ const queryClient = new QueryClient({
 
 const AppContext = createContext({
   isAuth: false,
-  setIsAuth: (isAuthenticated: boolean) => {}
+  role: undefined as RoleType | undefined,
+  setRole: (role?: RoleType) => {}
 })
 
 export const useAppContext = () => {
@@ -30,20 +33,28 @@ export const useAppContext = () => {
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [isAuth, setIsAuthState] = useState(() => Boolean(getAccessTokenFromLS()))
+  const [role, setRoleState] = useState<RoleType>()
+  const isAuth = Boolean(role)
 
-  const setIsAuth = useCallback((isAuthenticated: boolean) => {
-    if (isAuthenticated) {
-      setIsAuthState(true)
+  useEffect(() => {
+    const accessToken = getAccessTokenFromLS()
+    if (accessToken) {
+      const role = jwtDecode<TokenPayload>(accessToken).role
+      setRoleState(role)
+    }
+  }, [setRoleState])
+
+  const setRole = useCallback((role?: RoleType) => {
+    if (role) {
+      setRoleState(role)
     } else {
-      setIsAuthState(false)
       removeAccessTokenToLS()
       removeRefreshTokenToLS()
     }
   }, [])
 
   return (
-    <AppContext.Provider value={{ isAuth, setIsAuth }}>
+    <AppContext.Provider value={{ isAuth, role, setRole }}>
       <QueryClientProvider client={queryClient}>
         {children}
         <RefreshToken />
