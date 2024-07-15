@@ -13,9 +13,10 @@ import {
   setAccessTokenToLS,
   setRefreshTokenToLS
 } from '@/lib/common'
-import { authService } from '@/services'
-import { DishStatus, TableStatus } from '@/constants'
+import { authService, guestService } from '@/services'
+import { DishStatus, Role, TableStatus } from '@/constants'
 import { envConfig } from '@/configs'
+import { TokenPayload } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -57,8 +58,8 @@ export const checkAndRefreshToken = async (params?: { onSuccess?: () => void; on
 
   if (!accessToken || !refreshToken) return
 
-  const decodeAccessToken = jwtDecode(accessToken) as { exp: number; iat: number }
-  const decodeRefreshToken = jwtDecode(refreshToken) as { exp: number; iat: number }
+  const decodeAccessToken = jwtDecode<TokenPayload>(accessToken)
+  const decodeRefreshToken = jwtDecode<TokenPayload>(refreshToken)
 
   const now = Math.round(new Date().getTime() / 1000)
 
@@ -80,7 +81,8 @@ export const checkAndRefreshToken = async (params?: { onSuccess?: () => void; on
 
   if (remainingAccessTokenTime < validAccessTokenDuration / 3) {
     try {
-      const response = await authService.refreshToken()
+      const role = decodeAccessToken.role
+      const response = role === Role.Guest ? await guestService.refreshToken() : await authService.refreshToken()
 
       const { accessToken, refreshToken } = response.payload.data
 
