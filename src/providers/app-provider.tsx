@@ -45,9 +45,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [setRoleState])
 
   const setRole = useCallback((role?: RoleType) => {
-    if (role) {
-      setRoleState(role)
-    } else {
+    setRoleState(role)
+
+    if (!role) {
       removeAccessTokenToLS()
       removeRefreshTokenToLS()
     }
