@@ -1,14 +1,16 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import Image from 'next/image'
 
 import { useGuestGetOrderListQuery } from '@/hooks'
 import { formatCurrency, getVietnameseOrderStatus } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
+import { socket } from '@/lib/socket'
+import { UpdateOrderResType } from '@/schemaValidations/order.schema'
 
 export function OrdersCart() {
-  const { data } = useGuestGetOrderListQuery()
+  const { data, refetch } = useGuestGetOrderListQuery()
   const orderList = data?.payload.data || []
 
   const totalPrice = useMemo(() => {
@@ -16,6 +18,34 @@ export function OrdersCart() {
       return price + dish.dishSnapshot.price * dish.quantity
     }, 0)
   }, [orderList])
+
+  useEffect(() => {
+    if (socket.connected) {
+      onConnect()
+    }
+
+    function onConnect() {
+      console.log(socket.id)
+    }
+
+    function onDisconnect() {
+      console.log('disconnected')
+    }
+
+    function onOrderUpdate(data: UpdateOrderResType['data']) {
+      refetch()
+    }
+
+    socket.on('update-order', onOrderUpdate)
+    socket.on('connect', onConnect)
+    socket.on('disconnect', onDisconnect)
+
+    return () => {
+      socket.off('connect', onConnect)
+      socket.off('disconnect', onDisconnect)
+      socket.off('update-order', onOrderUpdate)
+    }
+  }, [])
 
   return (
     <>
