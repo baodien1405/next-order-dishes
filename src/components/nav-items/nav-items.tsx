@@ -32,6 +32,11 @@ const menuItems: MenuItem[] = [
     hideWhenLogin: true
   },
   {
+    title: 'Đơn hàng',
+    href: path.GUEST_ORDERS,
+    role: [Role.Guest]
+  },
+  {
     title: 'Quản lý',
     href: path.MANAGE_DASHBOARD,
     role: [Role.Owner, Role.Employee]

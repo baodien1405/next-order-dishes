@@ -14,7 +14,7 @@ import {
   setRefreshTokenToLS
 } from '@/lib/common'
 import { authService, guestService } from '@/services'
-import { DishStatus, Role, TableStatus } from '@/constants'
+import { DishStatus, OrderStatus, Role, TableStatus } from '@/constants'
 import { envConfig } from '@/configs'
 import { TokenPayload } from '@/types'
 
@@ -105,25 +105,35 @@ export const formatCurrency = (number: number) => {
 }
 
 export const getVietnameseDishStatus = (status: (typeof DishStatus)[keyof typeof DishStatus]) => {
-  switch (status) {
-    case DishStatus.Available:
-      return 'Có sẵn'
-    case DishStatus.Unavailable:
-      return 'Không có sẵn'
-    default:
-      return 'Ẩn'
-  }
+  const dishStatusVN = {
+    [DishStatus.Available]: 'Có sẵn',
+    [DishStatus.Unavailable]: 'Không có sẵn',
+    [DishStatus.Hidden]: 'Ẩn'
+  } as const
+
+  return dishStatusVN[status]
+}
+
+export const getVietnameseOrderStatus = (status: (typeof OrderStatus)[keyof typeof OrderStatus]) => {
+  const orderStatusVN = {
+    [OrderStatus.Paid]: 'Đã thanh toán',
+    [OrderStatus.Delivered]: 'Đã phục vụ',
+    [OrderStatus.Pending]: 'Chờ xử lý',
+    [OrderStatus.Processing]: 'Đang nấu',
+    [OrderStatus.Rejected]: 'Từ chối'
+  } as const
+
+  return orderStatusVN[status]
 }
 
 export const getVietnameseTableStatus = (status: (typeof TableStatus)[keyof typeof TableStatus]) => {
-  switch (status) {
-    case TableStatus.Available:
-      return 'Có sẵn'
-    case TableStatus.Reserved:
-      return 'Đã đặt'
-    default:
-      return 'Ẩn'
-  }
+  const tableStatusVN = {
+    [TableStatus.Available]: 'Có sẵn',
+    [TableStatus.Reserved]: 'Đã đặt',
+    [TableStatus.Hidden]: 'Ẩn'
+  } as const
+
+  return tableStatusVN[status]
 }
 
 export const getTableLink = ({ token, tableNumber }: { token: string; tableNumber: number }) => {
