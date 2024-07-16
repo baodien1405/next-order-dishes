@@ -8,8 +8,10 @@ import { formatCurrency, getVietnameseOrderStatus } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { socket } from '@/lib/socket'
 import { UpdateOrderResType } from '@/schemaValidations/order.schema'
+import { useToast } from '@/components/ui/use-toast'
 
 export function OrdersCart() {
+  const toast = useToast()
   const { data, refetch } = useGuestGetOrderListQuery()
   const orderList = data?.payload.data || []
 
@@ -33,6 +35,18 @@ export function OrdersCart() {
     }
 
     function onOrderUpdate(data: UpdateOrderResType['data']) {
+      const {
+        dishSnapshot: { name },
+        quantity,
+        status
+      } = data
+
+      toast.toast({
+        description: `Món ${name} (SL: ${quantity}) vừa được cập nhật sang trạng thái "${getVietnameseOrderStatus(
+          status
+        )}`
+      })
+
       refetch()
     }
 

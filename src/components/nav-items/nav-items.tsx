@@ -3,6 +3,18 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog'
+
 import { useAppContext } from '@/providers'
 import { path, Role } from '@/constants'
 import { RoleType } from '@/types'
@@ -76,9 +88,23 @@ export default function NavItems({ className }: { className?: string }) {
       })}
 
       {role && (
-        <div className={cn(className, 'cursor-pointer')} onClick={handleLogout}>
-          Đăng xuất
-        </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <div className={cn(className, 'cursor-pointer')}>Đăng xuất</div>
+          </AlertDialogTrigger>
+
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Bạn có muốn đăng xuất không?</AlertDialogTitle>
+              <AlertDialogDescription>Việc đăng xuất có thể làm mất hoá đơn của bạn</AlertDialogDescription>
+            </AlertDialogHeader>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel>Thoát</AlertDialogCancel>
+              <AlertDialogAction onClick={handleLogout}>OK</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
     </>
   )
