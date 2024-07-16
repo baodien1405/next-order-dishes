@@ -1,5 +1,6 @@
-import { DishStatusValues } from '@/constants'
 import z from 'zod'
+
+import { DishStatusValues } from '@/constants'
 
 export const CreateDishBody = z.object({
   name: z.string().min(1).max(256),
