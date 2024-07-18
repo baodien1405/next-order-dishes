@@ -1,11 +1,28 @@
+import queryString from 'query-string'
+
 import { http } from '@/lib/http'
-import { GetOrdersResType, UpdateOrderBodyType, UpdateOrderResType } from '@/schemaValidations/order.schema'
+import {
+  GetOrderDetailResType,
+  GetOrdersQueryParamsType,
+  GetOrdersResType,
+  UpdateOrderBodyType,
+  UpdateOrderResType
+} from '@/schemaValidations/order.schema'
 
 const PREFIX = '/orders'
 
 export const orderService = {
-  getAll() {
-    return http.get<GetOrdersResType>(PREFIX)
+  getAll(queryParams: GetOrdersQueryParamsType) {
+    const params = queryString.stringify({
+      fromDate: queryParams.fromDate?.toISOString(),
+      toDate: queryParams.toDate?.toISOString()
+    })
+
+    return http.get<GetOrdersResType>(`${PREFIX}?${params}`)
+  },
+
+  get(orderId: number) {
+    return http.get<GetOrderDetailResType>(`${PREFIX}/${orderId}`)
   },
 
   update(id: number, body: UpdateOrderBodyType) {
