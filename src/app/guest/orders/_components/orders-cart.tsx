@@ -9,16 +9,51 @@ import { Badge } from '@/components/ui/badge'
 import { socket } from '@/lib/socket'
 import { UpdateOrderResType } from '@/schemaValidations/order.schema'
 import { useToast } from '@/components/ui/use-toast'
+import { OrderStatus } from '@/constants'
 
 export function OrdersCart() {
   const toast = useToast()
   const { data, refetch } = useGuestGetOrderListQuery()
   const orderList = useMemo(() => data?.payload.data || [], [data?.payload.data])
 
-  const totalPrice = useMemo(() => {
-    return orderList.reduce((price, dish) => {
-      return price + dish.dishSnapshot.price * dish.quantity
-    }, 0)
+  const { unpaid, paid } = useMemo(() => {
+    return orderList.reduce(
+      (result, dish) => {
+        const unpaidStatusList: string[] = [OrderStatus.Pending, OrderStatus.Processing, OrderStatus.Delivered]
+
+        if (unpaidStatusList.includes(dish.status)) {
+          return {
+            ...result,
+            unpaid: {
+              price: result.unpaid.price + dish.dishSnapshot.price * dish.quantity,
+              quantity: result.unpaid.quantity + dish.quantity
+            }
+          }
+        }
+
+        if (dish.status === OrderStatus.Paid) {
+          return {
+            ...result,
+            paid: {
+              price: result.paid.price + dish.dishSnapshot.price * dish.quantity,
+              quantity: result.paid.quantity + dish.quantity
+            }
+          }
+        }
+
+        return result
+      },
+      {
+        unpaid: {
+          price: 0,
+          quantity: 0
+        },
+        paid: {
+          price: 0,
+          quantity: 0
+        }
+      }
+    )
   }, [orderList])
 
   useEffect(() => {
@@ -92,10 +127,19 @@ export function OrdersCart() {
         </div>
       ))}
 
+      {paid.price !== 0 && (
+        <div className="sticky bottom-0">
+          <div className="w-full flex space-x-4 text-xl font-semibold">
+            <span>Đã thanh toán · {paid.quantity} món</span>
+            <span>{formatCurrency(paid.price)}</span>
+          </div>
+        </div>
+      )}
+
       <div className="sticky bottom-0">
         <div className="w-full flex space-x-4 text-xl font-semibold">
-          <span>Tổng cộng · {orderList.length} món</span>
-          <span>{formatCurrency(totalPrice)}</span>
+          <span>Chưa thanh toán · {unpaid.quantity} món</span>
+          <span>{formatCurrency(unpaid.price)}</span>
         </div>
       </div>
     </>
