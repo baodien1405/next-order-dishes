@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
@@ -13,48 +13,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UpdateOrderBody, UpdateOrderBodyType } from '@/schemaValidations/order.schema'
 import { DishListResType } from '@/schemaValidations/dish.schema'
-import { getVietnameseOrderStatus } from '@/lib/utils'
+import { getVietnameseOrderStatus, handleErrorApi } from '@/lib/utils'
 import { OrderStatus, OrderStatusValues } from '@/constants/type'
 import { DishesDialog } from '@/app/manage/orders/_components/dishes-dialog'
-
-const fakeOrderDetail = {
-  id: 30,
-  guestId: 70,
-  guest: {
-    id: 70,
-    name: 'An',
-    tableNumber: 2,
-    createdAt: '2024-07-11T04:30:32.728Z',
-    updatedAt: '2024-07-11T05:00:34.131Z'
-  },
-  tableNumber: 2,
-  dishSnapshotId: 36,
-  dishSnapshot: {
-    id: 36,
-    name: 'Spaghetti 5',
-    price: 50000,
-    image: 'http://localhost:4000/static/e0001b7e08604e0dbabf0d8f95e6174a.jpg',
-    description: 'Mỳ ý',
-    status: 'Available',
-    dishId: 2,
-    createdAt: '2024-07-11T04:30:57.450Z',
-    updatedAt: '2024-07-11T04:30:57.450Z'
-  },
-  quantity: 1,
-  orderHandlerId: null,
-  orderHandler: null,
-  status: 'Paid',
-  createdAt: '2024-07-11T04:30:57.450Z',
-  updatedAt: '2024-07-11T04:31:38.806Z',
-  table: {
-    number: 2,
-    capacity: 10,
-    status: 'Reserved',
-    token: '667f3b1ce5e4429990dacea1809d20e7',
-    createdAt: '2024-06-21T06:52:26.847Z',
-    updatedAt: '2024-07-03T04:36:51.130Z'
-  }
-}
+import { useOrderDetailQuery, useUpdateOrderMutation } from '@/hooks'
+import { useToast } from '@/components/ui/use-toast'
 
 export function EditOrder({
   id,
@@ -65,8 +28,10 @@ export function EditOrder({
   setId: (value: number | undefined) => void
   onSubmitSuccess?: () => void
 }) {
-  const [selectedDish, setSelectedDish] = useState<DishListResType['data'][0]>(fakeOrderDetail.dishSnapshot as any)
-  const orderDetail = fakeOrderDetail
+  const toast = useToast()
+  const [selectedDish, setSelectedDish] = useState<DishListResType['data'][0] | null>(null)
+  const { data } = useOrderDetailQuery(id as number)
+  const updateOrderMutation = useUpdateOrderMutation()
   const form = useForm<UpdateOrderBodyType>({
     resolver: zodResolver(UpdateOrderBody),
     defaultValues: {
@@ -76,7 +41,40 @@ export function EditOrder({
     }
   })
 
-  const onSubmit = async (values: UpdateOrderBodyType) => {}
+  useEffect(() => {
+    if (data) {
+      const {
+        status,
+        dishSnapshot: { dishId },
+        quantity
+      } = data.payload.data
+
+      form.reset({
+        dishId: dishId || 0,
+        quantity,
+        status
+      })
+
+      setSelectedDish(data.payload.data.dishSnapshot)
+    }
+  }, [data, form])
+
+  const onSubmit = async (values: UpdateOrderBodyType) => {
+    if (updateOrderMutation.isPending) return
+    try {
+      const response = await updateOrderMutation.mutateAsync({
+        id: id as number,
+        ...values
+      })
+      toast.toast({
+        description: response.payload.message
+      })
+      reset()
+      onSubmitSuccess?.()
+    } catch (error) {
+      handleErrorApi({ error, setError: form.setError })
+    }
+  }
 
   const reset = () => {
     setId(undefined)

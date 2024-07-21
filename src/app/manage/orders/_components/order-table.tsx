@@ -23,16 +23,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { OrderStatusValues } from '@/constants/type'
-import { getVietnameseOrderStatus } from '@/lib/utils'
-import { GetOrdersResType } from '@/schemaValidations/order.schema'
+import { getVietnameseOrderStatus, handleErrorApi } from '@/lib/utils'
+import { GetOrdersResType, UpdateOrderResType } from '@/schemaValidations/order.schema'
 import { cn } from '@/lib/utils'
 import { useOrderService } from '@/app/manage/orders/_hooks'
 import orderTableColumns from '@/app/manage/orders/_components/order-table-columns'
 import { AddOrder } from '@/app/manage/orders/_components/add-order'
 import { EditOrder } from '@/app/manage/orders/_components/edit-order'
 import { OrderStatics } from '@/app/manage/orders/_components/order-statics'
-import { useOrderListQuery, useTableListQuery } from '@/hooks'
+import { useOrderListQuery, useTableListQuery, useUpdateOrderMutation } from '@/hooks'
 import { TableSkeleton } from '@/app/manage/orders/_components/table-skeleton'
+import { socket } from '@/lib/socket'
+import { useToast } from '@/components/ui/use-toast'
+import { GuestCreateOrdersResType } from '@/schemaValidations/guest.schema'
 
 export const OrderTableContext = createContext({
   setOrderIdEdit: (value: number | undefined) => {},
@@ -59,6 +62,7 @@ const initFromDate = startOfDay(new Date())
 const initToDate = endOfDay(new Date())
 
 export function OrderTable() {
+  const toast = useToast()
   const searchParam = useSearchParams()
   const [openStatusFilter, setOpenStatusFilter] = useState(false)
   const [fromDate, setFromDate] = useState(initFromDate)
@@ -66,11 +70,15 @@ export function OrderTable() {
   const page = searchParam.get('page') ? Number(searchParam.get('page')) : 1
   const pageIndex = page - 1
   const [orderIdEdit, setOrderIdEdit] = useState<number | undefined>()
+
+  const updateOrderMutation = useUpdateOrderMutation()
   const orderListQuery = useOrderListQuery({
     fromDate,
     toDate
   })
+  const refetchOrderList = orderListQuery.refetch
   const tableListQuery = useTableListQuery()
+
   const orderList = orderListQuery.data?.payload.data || []
   const tableList = tableListQuery.data?.payload.data || []
   const tableListSortedByNumber = tableList.sort((a, b) => a.number - b.number)
@@ -90,7 +98,20 @@ export function OrderTable() {
     dishId: number
     status: (typeof OrderStatusValues)[number]
     quantity: number
-  }) => {}
+  }) => {
+    if (updateOrderMutation.isPending) return
+
+    try {
+      await updateOrderMutation.mutateAsync({
+        ...body,
+        id: body.orderId
+      })
+    } catch (error) {
+      handleErrorApi({
+        error
+      })
+    }
+  }
 
   const table = useReactTable({
     data: orderList,
@@ -120,6 +141,65 @@ export function OrderTable() {
       pageSize: PAGE_SIZE
     })
   }, [table, pageIndex])
+
+  useEffect(() => {
+    if (socket.connected) {
+      onConnect()
+    }
+
+    function onConnect() {
+      console.log(socket.id)
+    }
+
+    function onDisconnect() {
+      console.log('disconnected')
+    }
+
+    function refetch() {
+      const now = new Date()
+      if (now >= fromDate && now <= toDate) {
+        refetchOrderList()
+      }
+    }
+
+    function onOrderUpdate(data: UpdateOrderResType['data']) {
+      const {
+        dishSnapshot: { name },
+        quantity,
+        status
+      } = data
+
+      toast.toast({
+        description: `Món ${name} (SL: ${quantity}) vừa được cập nhật sang trạng thái "${getVietnameseOrderStatus(
+          status
+        )}`
+      })
+
+      refetch()
+    }
+
+    function onNewOrder(data: GuestCreateOrdersResType['data']) {
+      const { guest } = data[0]
+
+      toast.toast({
+        description: `${guest?.name} tại bàn ${guest?.tableNumber} vừa đặt ${data.length} đơn`
+      })
+
+      refetch()
+    }
+
+    socket.on('update-order', onOrderUpdate)
+    socket.on('new-order', onNewOrder)
+    socket.on('connect', onConnect)
+    socket.on('disconnect', onDisconnect)
+
+    return () => {
+      socket.off('connect', onConnect)
+      socket.off('disconnect', onDisconnect)
+      socket.off('update-order', onOrderUpdate)
+      socket.off('new-order', onNewOrder)
+    }
+  }, [fromDate, refetchOrderList, toDate, toast])
 
   const resetDateFilter = () => {
     setFromDate(initFromDate)

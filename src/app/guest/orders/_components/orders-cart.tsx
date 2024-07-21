@@ -13,7 +13,7 @@ import { useToast } from '@/components/ui/use-toast'
 export function OrdersCart() {
   const toast = useToast()
   const { data, refetch } = useGuestGetOrderListQuery()
-  const orderList = data?.payload.data || []
+  const orderList = useMemo(() => data?.payload.data || [], [data?.payload.data])
 
   const totalPrice = useMemo(() => {
     return orderList.reduce((price, dish) => {
@@ -59,7 +59,7 @@ export function OrdersCart() {
       socket.off('disconnect', onDisconnect)
       socket.off('update-order', onOrderUpdate)
     }
-  }, [])
+  }, [refetch, toast])
 
   return (
     <>
