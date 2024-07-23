@@ -24,7 +24,7 @@ import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { OrderStatusValues } from '@/constants/type'
 import { getVietnameseOrderStatus, handleErrorApi } from '@/lib/utils'
-import { GetOrdersResType, UpdateOrderResType } from '@/schemaValidations/order.schema'
+import { GetOrdersResType, PayGuestOrdersResType, UpdateOrderResType } from '@/schemaValidations/order.schema'
 import { cn } from '@/lib/utils'
 import { useOrderService } from '@/app/manage/orders/_hooks'
 import orderTableColumns from '@/app/manage/orders/_components/order-table-columns'
@@ -188,8 +188,19 @@ export function OrderTable() {
       refetch()
     }
 
+    function onPayment(data: PayGuestOrdersResType['data']) {
+      const { guest } = data[0]
+
+      toast.toast({
+        description: `${guest?.name} tại bàn ${guest?.tableNumber} thanh toán thành công ${data.length} đơn`
+      })
+
+      refetch()
+    }
+
     socket.on('update-order', onOrderUpdate)
     socket.on('new-order', onNewOrder)
+    socket.on('payment', onPayment)
     socket.on('connect', onConnect)
     socket.on('disconnect', onDisconnect)
 
@@ -198,6 +209,7 @@ export function OrderTable() {
       socket.off('disconnect', onDisconnect)
       socket.off('update-order', onOrderUpdate)
       socket.off('new-order', onNewOrder)
+      socket.off('payment', onPayment)
     }
   }, [fromDate, refetchOrderList, toDate, toast])
 

@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { Fragment } from 'react'
+import { Loader2 } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -11,18 +12,43 @@ import {
   formatCurrency,
   formatDateTimeToLocaleString,
   formatDateTimeToTimeString,
-  getVietnameseOrderStatus
+  getVietnameseOrderStatus,
+  handleErrorApi
 } from '@/lib/utils'
-import { GetOrdersResType } from '@/schemaValidations/order.schema'
+import { GetOrdersResType, PayGuestOrdersResType } from '@/schemaValidations/order.schema'
+import { usePayForGuestOrdersMutation } from '@/hooks'
 
 type Guest = GetOrdersResType['data'][0]['guest']
 type Orders = GetOrdersResType['data']
 
-export function OrderGuestDetail({ guest, orders }: { guest: Guest; orders: Orders }) {
+export function OrderGuestDetail({
+  guest,
+  orders,
+  onPaySuccess
+}: {
+  guest: Guest
+  orders: Orders
+  onPaySuccess?: (data: PayGuestOrdersResType['data']) => void
+}) {
+  const payForGuestOrdersMutation = usePayForGuestOrdersMutation()
+
   const ordersFilterToPurchase = guest
     ? orders.filter((order) => order.status !== OrderStatus.Paid && order.status !== OrderStatus.Rejected)
     : []
+
   const purchasedOrderFilter = guest ? orders.filter((order) => order.status === OrderStatus.Paid) : []
+
+  const handlePayGuestOrders = async () => {
+    if (payForGuestOrdersMutation.isPending) return
+
+    try {
+      const response = await payForGuestOrdersMutation.mutateAsync({ guestId: guest?.id as number })
+      onPaySuccess?.(response.payload.data)
+    } catch (error) {
+      handleErrorApi({ error })
+    }
+  }
+
   return (
     <div className="space-y-2 text-sm">
       {guest && (
@@ -119,7 +145,14 @@ export function OrderGuestDetail({ guest, orders }: { guest: Guest; orders: Orde
       </div>
 
       <div>
-        <Button className="w-full" size={'sm'} variant={'secondary'} disabled={ordersFilterToPurchase.length === 0}>
+        <Button
+          className="w-full"
+          size={'sm'}
+          variant={'secondary'}
+          disabled={ordersFilterToPurchase.length === 0 || payForGuestOrdersMutation.isPending}
+          onClick={handlePayGuestOrders}
+        >
+          {payForGuestOrdersMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Thanh toán tất cả ({ordersFilterToPurchase.length} đơn)
         </Button>
       </div>

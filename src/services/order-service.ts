@@ -5,6 +5,8 @@ import {
   GetOrderDetailResType,
   GetOrdersQueryParamsType,
   GetOrdersResType,
+  PayGuestOrdersBodyType,
+  PayGuestOrdersResType,
   UpdateOrderBodyType,
   UpdateOrderResType
 } from '@/schemaValidations/order.schema'
@@ -27,5 +29,9 @@ export const orderService = {
 
   update(id: number, body: UpdateOrderBodyType) {
     return http.put<UpdateOrderResType>(`${PREFIX}/${id}`, body)
+  },
+
+  pay(body: PayGuestOrdersBodyType) {
+    return http.post<PayGuestOrdersResType>(`${PREFIX}/pay`, body)
   }
 }
