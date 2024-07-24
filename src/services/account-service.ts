@@ -1,20 +1,28 @@
+import queryString from 'query-string'
+
 import { http } from '@/lib/http'
 import {
   AccountListResType,
   AccountResType,
   ChangePasswordBodyType,
   CreateEmployeeAccountBodyType,
+  CreateGuestBodyType,
+  CreateGuestResType,
+  GetGuestListQueryParamsType,
+  GetListGuestsResType,
   UpdateEmployeeAccountBodyType,
   UpdateMeBodyType
 } from '@/schemaValidations/account.schema'
 
+const PREFIX = '/accounts'
+
 export const accountService = {
   me() {
-    return http.get<AccountResType>('/accounts/me')
+    return http.get<AccountResType>(`${PREFIX}/me`)
   },
 
   sMe(accessToken: string) {
-    return http.get<AccountResType>('/accounts/me', {
+    return http.get<AccountResType>(`${PREFIX}/me`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -22,30 +30,43 @@ export const accountService = {
   },
 
   updateMe(body: UpdateMeBodyType) {
-    return http.put<AccountResType>('/accounts/me', body)
+    return http.put<AccountResType>(`${PREFIX}/me`, body)
   },
 
   changePassword(body: ChangePasswordBodyType) {
-    return http.put<AccountResType>('/accounts/change-password', body)
+    return http.put<AccountResType>(`${PREFIX}/change-password`, body)
   },
 
   getAll() {
-    return http.get<AccountListResType>('/accounts')
+    return http.get<AccountListResType>(PREFIX)
   },
 
   get(id: number) {
-    return http.get<AccountResType>(`/accounts/detail/${id}`)
+    return http.get<AccountResType>(`${PREFIX}/detail/${id}`)
   },
 
   add(body: CreateEmployeeAccountBodyType) {
-    return http.post<AccountResType>('/accounts', body)
+    return http.post<AccountResType>(PREFIX, body)
   },
 
   update(id: number, body: UpdateEmployeeAccountBodyType) {
-    return http.put<AccountResType>(`/accounts/detail/${id}`, body)
+    return http.put<AccountResType>(`${PREFIX}/detail/${id}`, body)
   },
 
   delete(id: number) {
-    return http.delete<AccountResType>(`/accounts/detail/${id}`)
+    return http.delete<AccountResType>(`${PREFIX}/detail/${id}`)
+  },
+
+  getGuestList(queryParams: GetGuestListQueryParamsType) {
+    const params = queryString.stringify({
+      fromDate: queryParams.fromDate?.toISOString(),
+      toDate: queryParams.toDate?.toISOString()
+    })
+
+    return http.get<GetListGuestsResType>(`${PREFIX}/pay?${params}`)
+  },
+
+  createGuest(body: CreateGuestBodyType) {
+    return http.post<CreateGuestResType>(`${PREFIX}/guests`, body)
   }
 }

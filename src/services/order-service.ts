@@ -2,6 +2,8 @@ import queryString from 'query-string'
 
 import { http } from '@/lib/http'
 import {
+  CreateOrdersBodyType,
+  CreateOrdersResType,
   GetOrderDetailResType,
   GetOrdersQueryParamsType,
   GetOrdersResType,
@@ -25,6 +27,10 @@ export const orderService = {
 
   get(orderId: number) {
     return http.get<GetOrderDetailResType>(`${PREFIX}/${orderId}`)
+  },
+
+  add(body: CreateOrdersBodyType) {
+    return http.post<CreateOrdersResType>(PREFIX, body)
   },
 
   update(id: number, body: UpdateOrderBodyType) {

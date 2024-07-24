@@ -21,8 +21,7 @@ import { GuestLoginBody, GuestLoginBodyType } from '@/schemaValidations/guest.sc
 import { OrderQuantity } from '@/app/guest/menu/_components'
 import { cn, formatCurrency } from '@/lib/utils'
 import { DishStatus } from '@/constants/type'
-import { TablesDialog } from '@/app/manage/orders/_components/tables-dialog'
-import { GuestsDialog } from '@/app/manage/orders/_components/guests-dialog'
+import { TablesDialog, GuestsDialog } from '@/app/manage/orders/_components'
 
 export function AddOrder() {
   const [open, setOpen] = useState(false)
