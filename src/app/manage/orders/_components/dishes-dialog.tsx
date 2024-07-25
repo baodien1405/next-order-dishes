@@ -180,7 +180,13 @@ export function DishesDialog({ onChoose }: { onChoose: (dish: DishItem) => void 
                 <AutoPagination
                   page={table.getState().pagination.pageIndex + 1}
                   pageSize={table.getPageCount()}
-                  pathname="/manage/dishes"
+                  isLink={false}
+                  onClick={(page) => {
+                    table.setPagination({
+                      pageIndex: page - 1,
+                      pageSize: PAGE_SIZE
+                    })
+                  }}
                 />
               </div>
             </div>

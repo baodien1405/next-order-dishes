@@ -1,3 +1,6 @@
+import { Button } from '@/components/ui/button'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
 import {
   Pagination,
   PaginationContent,
@@ -12,7 +15,9 @@ import { cn } from '@/lib/utils'
 interface Props {
   page: number
   pageSize: number
-  pathname: string
+  pathname?: string
+  isLink?: boolean
+  onClick?: (page: number) => void
 }
 
 /**
@@ -38,10 +43,11 @@ Với range = 2 áp dụng cho khoảng cách đầu, cuối và xung quanh curr
 
 const RANGE = 2
 
-export default function AutoPagination({ page, pageSize, pathname }: Props) {
+export default function AutoPagination({ page, pageSize, pathname = '/', isLink = true, onClick }: Props) {
   const renderPagination = () => {
     let dotAfter = false
     let dotBefore = false
+
     const renderDotBefore = (index: number) => {
       if (!dotBefore) {
         dotBefore = true
@@ -53,6 +59,7 @@ export default function AutoPagination({ page, pageSize, pathname }: Props) {
       }
       return null
     }
+
     const renderDotAfter = (index: number) => {
       if (!dotAfter) {
         dotAfter = true
@@ -64,6 +71,7 @@ export default function AutoPagination({ page, pageSize, pathname }: Props) {
       }
       return null
     }
+
     return Array(pageSize)
       .fill(0)
       .map((_, index) => {
@@ -81,19 +89,30 @@ export default function AutoPagination({ page, pageSize, pathname }: Props) {
         } else if (page >= pageSize - RANGE * 2 && pageNumber > RANGE && pageNumber < page - RANGE) {
           return renderDotBefore(index)
         }
+
         return (
           <PaginationItem key={index}>
-            <PaginationLink
-              href={{
-                pathname,
-                query: {
-                  page: pageNumber
-                }
-              }}
-              isActive={pageNumber === page}
-            >
-              {pageNumber}
-            </PaginationLink>
+            {isLink ? (
+              <PaginationLink
+                href={{
+                  pathname,
+                  query: {
+                    page: pageNumber
+                  }
+                }}
+                isActive={pageNumber === page}
+              >
+                {pageNumber}
+              </PaginationLink>
+            ) : (
+              <Button
+                className="w-9 h-9 p-0"
+                variant={pageNumber === page ? 'outline' : 'ghost'}
+                onClick={() => onClick?.(pageNumber)}
+              >
+                {pageNumber}
+              </Button>
+            )}
           </PaginationItem>
         )
       })
@@ -102,42 +121,71 @@ export default function AutoPagination({ page, pageSize, pathname }: Props) {
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious
-            href={{
-              pathname,
-              query: {
-                page: page - 1
-              }
-            }}
-            className={cn({
-              'cursor-not-allowed': page === 1
-            })}
-            onClick={(e) => {
-              if (page === 1) {
-                e.preventDefault()
-              }
-            }}
-          />
+          {isLink ? (
+            <PaginationPrevious
+              href={{
+                pathname,
+                query: {
+                  page: page - 1
+                }
+              }}
+              className={cn({
+                'cursor-not-allowed': page === 1
+              })}
+              onClick={(e) => {
+                if (page === 1) {
+                  e.preventDefault()
+                }
+              }}
+            />
+          ) : (
+            <Button
+              disabled={page === 1}
+              variant="ghost"
+              className={cn('h-9 p-0 pr-2', {
+                'cursor-not-allowed': page === 1
+              })}
+              onClick={() => onClick?.(page - 1)}
+            >
+              <ChevronLeft />
+              Prev
+            </Button>
+          )}
         </PaginationItem>
+
         {renderPagination()}
 
         <PaginationItem>
-          <PaginationNext
-            href={{
-              pathname,
-              query: {
-                page: page + 1
-              }
-            }}
-            className={cn({
-              'cursor-not-allowed': page === pageSize
-            })}
-            onClick={(e) => {
-              if (page === pageSize) {
-                e.preventDefault()
-              }
-            }}
-          />
+          {isLink ? (
+            <PaginationNext
+              href={{
+                pathname,
+                query: {
+                  page: page + 1
+                }
+              }}
+              className={cn({
+                'cursor-not-allowed': page === pageSize
+              })}
+              onClick={(e) => {
+                if (page === pageSize) {
+                  e.preventDefault()
+                }
+              }}
+            />
+          ) : (
+            <Button
+              disabled={page === pageSize}
+              variant="ghost"
+              className={cn('h-9 p-0 pl-2', {
+                'cursor-not-allowed': page === pageSize
+              })}
+              onClick={() => onClick?.(page + 1)}
+            >
+              Next
+              <ChevronRight />
+            </Button>
+          )}
         </PaginationItem>
       </PaginationContent>
     </Pagination>
