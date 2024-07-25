@@ -22,6 +22,7 @@ import AutoPagination from '@/components/auto-pagination'
 import { Input } from '@/components/ui/input'
 import { formatDateTimeToLocaleString, simpleMatchText } from '@/lib/utils'
 import { GetListGuestsResType } from '@/schemaValidations/account.schema'
+import { useGuestListQuery } from '@/hooks'
 
 type GuestItem = GetListGuestsResType['data'][0]
 
@@ -67,7 +68,11 @@ export function GuestsDialog({ onChoose }: { onChoose: (guest: GuestItem) => voi
   const [open, setOpen] = useState(false)
   const [fromDate, setFromDate] = useState(initFromDate)
   const [toDate, setToDate] = useState(initToDate)
-  const data: GetListGuestsResType['data'] = []
+  const guestListQuery = useGuestListQuery({
+    fromDate,
+    toDate
+  })
+  const data = guestListQuery.data?.payload.data || []
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})

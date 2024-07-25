@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { PlusCircle } from 'lucide-react'
+import { Loader2, PlusCircle } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,21 +15,25 @@ import { GetListGuestsResType } from '@/schemaValidations/account.schema'
 import { Switch } from '@/components/ui/switch'
 
 import { CreateOrdersBodyType } from '@/schemaValidations/order.schema'
-import { DishListResType } from '@/schemaValidations/dish.schema'
 import { GuestLoginBody, GuestLoginBodyType } from '@/schemaValidations/guest.schema'
 
 import { OrderQuantity } from '@/app/guest/menu/_components'
-import { cn, formatCurrency } from '@/lib/utils'
+import { cn, formatCurrency, handleErrorApi } from '@/lib/utils'
 import { DishStatus } from '@/constants/type'
 import { TablesDialog, GuestsDialog } from '@/app/manage/orders/_components'
+import { useAddOrderMutation, useCreateGuestMutation, useDishListQuery } from '@/hooks'
+import { useToast } from '@/components/ui/use-toast'
 
 export function AddOrder() {
+  const toast = useToast()
   const [open, setOpen] = useState(false)
   const [selectedGuest, setSelectedGuest] = useState<GetListGuestsResType['data'][0] | null>(null)
   const [isNewGuest, setIsNewGuest] = useState(true)
   const [orders, setOrders] = useState<CreateOrdersBodyType['orders']>([])
-  const dishes: DishListResType['data'] = []
-
+  const addOrderMutation = useAddOrderMutation()
+  const createGuestMutation = useCreateGuestMutation()
+  const { data } = useDishListQuery()
+  const dishes = useMemo(() => data?.payload.data || [], [data?.payload.data])
   const totalPrice = useMemo(() => {
     return dishes.reduce((result, dish) => {
       const order = orders.find((order) => order.dishId === dish.id)
@@ -63,7 +67,50 @@ export function AddOrder() {
     })
   }
 
-  const handleOrder = async () => {}
+  const handleOrder = async () => {
+    if (addOrderMutation.isPending) return
+    try {
+      let guestId = selectedGuest?.id
+
+      if (isNewGuest) {
+        const response = await createGuestMutation.mutateAsync({
+          name,
+          tableNumber
+        })
+
+        guestId = response.payload.data.id
+      }
+
+      if (!guestId) {
+        toast.toast({
+          description: 'Vui lòng chọn khách'
+        })
+
+        return
+      }
+
+      const response = await addOrderMutation.mutateAsync({
+        guestId,
+        orders
+      })
+
+      toast.toast({
+        description: response.payload.message
+      })
+
+      reset()
+    } catch (error) {
+      handleErrorApi({ error, setError: form.setError })
+    }
+  }
+
+  const reset = () => {
+    form.reset()
+    setOrders([])
+    setSelectedGuest(null)
+    setIsNewGuest(false)
+    setOpen(false)
+  }
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
@@ -181,9 +228,19 @@ export function AddOrder() {
             </div>
           ))}
         <DialogFooter>
-          <Button className="w-full justify-between" onClick={handleOrder} disabled={orders.length === 0}>
-            <span>Đặt hàng · {orders.length} món</span>
-            <span>{formatCurrency(totalPrice)}</span>
+          <Button
+            className="w-full justify-between"
+            onClick={handleOrder}
+            disabled={orders.length === 0 || addOrderMutation.isPending}
+          >
+            {addOrderMutation.isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <span>Đặt hàng · {orders.length} món</span>
+                <span>{formatCurrency(totalPrice)}</span>
+              </>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

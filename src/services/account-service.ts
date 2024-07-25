@@ -63,7 +63,7 @@ export const accountService = {
       toDate: queryParams.toDate?.toISOString()
     })
 
-    return http.get<GetListGuestsResType>(`${PREFIX}/pay?${params}`)
+    return http.get<GetListGuestsResType>(`${PREFIX}/guests?${params}`)
   },
 
   createGuest(body: CreateGuestBodyType) {
