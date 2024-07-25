@@ -1,7 +1,7 @@
 import z from 'zod'
 
 import { OrderSchema } from '@/schemaValidations/order.schema'
-import { RoleValues } from '@/constants'
+import { Role } from '@/constants'
 
 export const GuestLoginBody = z
   .object({
@@ -20,7 +20,7 @@ export const GuestLoginRes = z.object({
     guest: z.object({
       id: z.number(),
       name: z.string(),
-      role: z.enum(RoleValues),
+      role: z.enum([Role.Guest]),
       tableNumber: z.number().nullable(),
       createdAt: z.date(),
       updatedAt: z.date()
