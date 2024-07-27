@@ -54,7 +54,11 @@ export const handleErrorApi = ({
   }
 }
 
-export const checkAndRefreshToken = async (params?: { onSuccess?: () => void; onError?: () => void }) => {
+export const checkAndRefreshToken = async (params?: {
+  force?: boolean
+  onSuccess?: () => void
+  onError?: () => void
+}) => {
   const accessToken = getAccessTokenFromLS()
   const refreshToken = getRefreshTokenFromLS()
 
@@ -81,7 +85,7 @@ export const checkAndRefreshToken = async (params?: { onSuccess?: () => void; on
   const remainingAccessTokenTime = decodeAccessToken.exp - now
   const validAccessTokenDuration = decodeAccessToken.exp - decodeAccessToken.iat
 
-  if (remainingAccessTokenTime < validAccessTokenDuration / 3) {
+  if (params?.force || remainingAccessTokenTime < validAccessTokenDuration / 3) {
     try {
       const role = decodeAccessToken.role
       const response = role === Role.Guest ? await guestService.refreshToken() : await authService.refreshToken()
