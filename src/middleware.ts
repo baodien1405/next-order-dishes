@@ -7,7 +7,8 @@ import { TokenPayload } from '@/types'
 
 const managePaths = ['/manage']
 const guestPaths = ['/guest']
-const privatePaths = [...managePaths, ...guestPaths]
+const onlyOwnerPaths = ['/manage/accounts']
+const privatePaths = ['/manage', '/guest']
 const authPaths = ['/login']
 
 export function middleware(request: NextRequest) {
@@ -38,10 +39,12 @@ export function middleware(request: NextRequest) {
     }
 
     const role = jwtDecode<TokenPayload>(refreshToken).role
+
     const isGuestGoToManagePath = role === Role.Guest && managePaths.some((path) => pathname.startsWith(path))
     const isNotGuestGoToGuestPath = role !== Role.Guest && guestPaths.some((path) => pathname.startsWith(path))
+    const isNotOwnerGoToOwnerPath = role !== Role.Owner && onlyOwnerPaths.some((path) => pathname.startsWith(path))
 
-    if (isGuestGoToManagePath || isNotGuestGoToGuestPath) {
+    if (isGuestGoToManagePath || isNotGuestGoToGuestPath || isNotOwnerGoToOwnerPath) {
       return NextResponse.redirect(new URL(path.HOME, request.url))
     }
   }

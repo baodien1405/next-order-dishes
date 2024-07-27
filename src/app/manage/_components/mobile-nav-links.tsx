@@ -8,9 +8,12 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import { menuItems } from '@/constants'
+import { useAppContext } from '@/providers'
 
 export function MobileNavLinks() {
   const pathname = usePathname()
+  const { role } = useAppContext()
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -28,22 +31,24 @@ export function MobileNavLinks() {
             <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
             <span className="sr-only">Acme Inc</span>
           </Link>
-          {menuItems.map((Item, index) => {
-            const isActive = pathname === Item.href
-            return (
-              <Link
-                key={index}
-                href={Item.href}
-                className={cn('flex items-center gap-4 px-2.5  hover:text-foreground', {
-                  'text-foreground': isActive,
-                  'text-muted-foreground': !isActive
-                })}
-              >
-                <Item.Icon className="h-5 w-5" />
-                {Item.title}
-              </Link>
-            )
-          })}
+          {menuItems
+            .filter((item) => item.roles.includes(role as any))
+            .map((Item, index) => {
+              const isActive = pathname === Item.href
+              return (
+                <Link
+                  key={index}
+                  href={Item.href}
+                  className={cn('flex items-center gap-4 px-2.5  hover:text-foreground', {
+                    'text-foreground': isActive,
+                    'text-muted-foreground': !isActive
+                  })}
+                >
+                  <Item.Icon className="h-5 w-5" />
+                  {Item.title}
+                </Link>
+              )
+            })}
         </nav>
       </SheetContent>
     </Sheet>
