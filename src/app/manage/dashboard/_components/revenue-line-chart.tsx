@@ -5,6 +5,8 @@ import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { format, parse } from 'date-fns'
+import { DashboardIndicatorResType } from '@/schemaValidations/indicator.schema'
+
 const chartConfig = {
   desktop: {
     label: 'Desktop',
@@ -12,50 +14,11 @@ const chartConfig = {
   }
 } satisfies ChartConfig
 
-export function RevenueLineChart() {
-  // fake 10 item
-  const chartData = [
-    {
-      date: '01/01/2024',
-      revenue: 1000
-    },
-    {
-      date: '02/01/2024',
-      revenue: 2000
-    },
-    {
-      date: '03/01/2024',
-      revenue: 1500
-    },
-    {
-      date: '04/01/2024',
-      revenue: 3000
-    },
-    {
-      date: '05/01/2024',
-      revenue: 2500
-    },
-    {
-      date: '06/01/2024',
-      revenue: 4000
-    },
-    {
-      date: '07/01/2024',
-      revenue: 3500
-    },
-    {
-      date: '08/01/2024',
-      revenue: 5000
-    },
-    {
-      date: '09/01/2024',
-      revenue: 4500
-    },
-    {
-      date: '10/01/2024',
-      revenue: 6000
-    }
-  ]
+interface RevenueLineChartProps {
+  chartData: DashboardIndicatorResType['data']['revenueByDate']
+}
+
+export function RevenueLineChart({ chartData }: RevenueLineChartProps) {
   return (
     <Card>
       <CardHeader>
@@ -74,7 +37,7 @@ export function RevenueLineChart() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey='date'
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -89,12 +52,19 @@ export function RevenueLineChart() {
                 return ''
               }}
             />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator='dashed' />} />
-            <Line dataKey='revenue' type='linear' stroke='var(--color-desktop)' strokeWidth={2} dot={false} />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+            <Line
+              dataKey="revenue"
+              name="Doanh thu"
+              type="linear"
+              stroke="var(--color-desktop)"
+              strokeWidth={2}
+              dot={false}
+            />
           </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className='flex-col items-start gap-2 text-sm'>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
         {/* <div className='flex gap-2 font-medium leading-none'>
           Trending up by 5.2% this month <TrendingUp className='h-4 w-4' />
         </div>

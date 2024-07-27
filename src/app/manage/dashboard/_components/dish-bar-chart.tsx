@@ -5,6 +5,7 @@ import { Bar, BarChart, XAxis, YAxis } from 'recharts'
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { useMemo } from 'react'
 
 const colors = [
   'var(--color-chrome)',
@@ -39,14 +40,24 @@ const chartConfig = {
     color: 'hsl(var(--chart-5))'
   }
 } satisfies ChartConfig
-const chartData = [
-  { name: 'chrome', successOrders: 275, fill: 'var(--color-chrome)' },
-  { name: 'safari', successOrders: 200, fill: 'var(--color-safari)' },
-  { name: 'firefox', successOrders: 187, fill: 'var(--color-firefox)' },
-  { name: 'edge', successOrders: 173, fill: 'var(--color-edge)' },
-  { name: 'other', successOrders: 90, fill: 'var(--color-other)' }
-]
-export function DishBarChart() {
+
+interface DishBarChartProps {
+  chartData: Array<{
+    name: string
+    successOrders: number
+  }>
+}
+
+export function DishBarChart({ chartData }: DishBarChartProps) {
+  const chartDataColors = useMemo(
+    () =>
+      chartData.map((data, index) => ({
+        ...data,
+        fill: colors[index] || colors[colors.length - 1]
+      })),
+    [chartData]
+  )
+
   return (
     <Card>
       <CardHeader>
@@ -57,15 +68,15 @@ export function DishBarChart() {
         <ChartContainer config={chartConfig}>
           <BarChart
             accessibilityLayer
-            data={chartData}
-            layout='vertical'
+            data={chartDataColors}
+            layout="vertical"
             margin={{
               left: 0
             }}
           >
             <YAxis
-              dataKey='name'
-              type='category'
+              dataKey="name"
+              type="category"
               tickLine={false}
               tickMargin={2}
               axisLine={false}
@@ -75,13 +86,13 @@ export function DishBarChart() {
                 // return chartConfig[value as keyof typeof chartConfig]?.label
               }}
             />
-            <XAxis dataKey='successOrders' type='number' hide />
+            <XAxis dataKey="successOrders" type="number" hide />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <Bar dataKey='successOrders' name={'Đơn thanh toán'} layout='vertical' radius={5} />
+            <Bar dataKey="successOrders" name={'Đơn thanh toán'} layout="vertical" radius={5} />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className='flex-col items-start gap-2 text-sm'>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
         {/* <div className='flex gap-2 font-medium leading-none'>
           Trending up by 5.2% this month <TrendingUp className='h-4 w-4' />
         </div> */}
