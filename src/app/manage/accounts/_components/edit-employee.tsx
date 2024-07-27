@@ -17,12 +17,15 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
+
 import { UpdateEmployeeAccountBody, UpdateEmployeeAccountBodyType } from '@/schemaValidations/account.schema'
 import { useAccountDetailQuery, useUpdateAccountMutation, useUploadMediaMutation } from '@/hooks'
 import { handleErrorApi } from '@/lib/utils'
+import { Role, RoleValues } from '@/constants'
 
 export function EditEmployee({
   id,
@@ -49,7 +52,8 @@ export function EditEmployee({
       avatar: undefined,
       password: undefined,
       confirmPassword: undefined,
-      changePassword: false
+      changePassword: false,
+      role: Role.Employee
     }
   })
 
@@ -66,14 +70,15 @@ export function EditEmployee({
 
   useEffect(() => {
     if (data) {
-      const { avatar, name, email } = data.payload.data
+      const { avatar, name, email, role } = data.payload.data
       form.reset({
         name,
         email,
         avatar: avatar ?? undefined,
         password: form.getValues('password'),
         confirmPassword: form.getValues('confirmPassword'),
-        changePassword: form.getValues('changePassword')
+        changePassword: form.getValues('changePassword'),
+        role
       })
     }
   }, [data, form])
@@ -186,6 +191,7 @@ export function EditEmployee({
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="email"
@@ -201,6 +207,38 @@ export function EditEmployee({
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                      <Label htmlFor="description">Vai trò</Label>
+                      <div className="col-span-3 w-full space-y-2">
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Chọn vai trò" />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            {RoleValues.filter((role) => role !== Role.Guest).map((role) => (
+                              <SelectItem key={role} value={role}>
+                                {role}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        <FormMessage />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="changePassword"
