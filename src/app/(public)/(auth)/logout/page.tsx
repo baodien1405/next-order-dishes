@@ -17,7 +17,7 @@ function Logout() {
   const refreshTokenFromUrl = searchParams.get('refreshToken')
   const accessTokenFromUrl = searchParams.get('accessToken')
 
-  const { setRole } = useAppContext()
+  const { setRole, disconnectSocket } = useAppContext()
   const { mutateAsync } = useLogoutMutation()
 
   useEffect(() => {
@@ -32,7 +32,9 @@ function Logout() {
         timeoutRef.current = setTimeout(() => {
           logoutRequestRef.current = null
         }, 1000)
-        setRole()
+
+        setRole(undefined)
+        disconnectSocket()
         router.push(path.LOGIN)
       })
     } else {
@@ -40,7 +42,7 @@ function Logout() {
     }
 
     return () => clearTimeout(timeoutRef.current)
-  }, [mutateAsync, router, refreshTokenFromUrl, accessTokenFromUrl, setRole])
+  }, [mutateAsync, router, refreshTokenFromUrl, accessTokenFromUrl, setRole, disconnectSocket])
 
   return <div>Logout...</div>
 }

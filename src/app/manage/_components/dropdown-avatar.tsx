@@ -21,7 +21,7 @@ import { useAppContext } from '@/providers'
 
 export function DropdownAvatar() {
   const router = useRouter()
-  const { setRole } = useAppContext()
+  const { setRole, disconnectSocket } = useAppContext()
   const logoutMutation = useLogoutMutation()
   const { data } = useAccountMeQuery()
   const profile = data?.payload.data
@@ -31,7 +31,8 @@ export function DropdownAvatar() {
 
     try {
       await logoutMutation.mutateAsync()
-      setRole()
+      setRole(undefined)
+      disconnectSocket()
       router.push(path.HOME)
     } catch (error) {
       handleErrorApi({ error })

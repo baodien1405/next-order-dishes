@@ -6,13 +6,14 @@ import Image from 'next/image'
 import { useGuestGetOrderListQuery } from '@/hooks'
 import { formatCurrency, getVietnameseOrderStatus } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
-import { socket } from '@/lib/socket'
 import { PayGuestOrdersResType, UpdateOrderResType } from '@/schemaValidations/order.schema'
 import { useToast } from '@/components/ui/use-toast'
 import { OrderStatus } from '@/constants'
+import { useAppContext } from '@/providers'
 
 export function OrdersCart() {
   const toast = useToast()
+  const { socket } = useAppContext()
   const { data, refetch } = useGuestGetOrderListQuery()
   const orderList = useMemo(() => data?.payload.data || [], [data?.payload.data])
 
@@ -57,12 +58,12 @@ export function OrdersCart() {
   }, [orderList])
 
   useEffect(() => {
-    if (socket.connected) {
+    if (socket?.connected) {
       onConnect()
     }
 
     function onConnect() {
-      console.log(socket.id)
+      console.log(socket?.id)
     }
 
     function onDisconnect() {
@@ -95,18 +96,18 @@ export function OrdersCart() {
       refetch()
     }
 
-    socket.on('update-order', onOrderUpdate)
-    socket.on('connect', onConnect)
-    socket.on('disconnect', onDisconnect)
-    socket.on('payment', onPayment)
+    socket?.on('update-order', onOrderUpdate)
+    socket?.on('connect', onConnect)
+    socket?.on('disconnect', onDisconnect)
+    socket?.on('payment', onPayment)
 
     return () => {
-      socket.off('connect', onConnect)
-      socket.off('disconnect', onDisconnect)
-      socket.off('update-order', onOrderUpdate)
-      socket.off('payment', onPayment)
+      socket?.off('connect', onConnect)
+      socket?.off('disconnect', onDisconnect)
+      socket?.off('update-order', onOrderUpdate)
+      socket?.off('payment', onPayment)
     }
-  }, [refetch, toast])
+  }, [refetch, toast, socket])
 
   return (
     <>

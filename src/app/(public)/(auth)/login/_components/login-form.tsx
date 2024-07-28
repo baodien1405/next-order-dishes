@@ -12,8 +12,7 @@ import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoginBody, LoginBodyType } from '@/schemaValidations/auth.schema'
 import { useLoginMutation } from '@/hooks'
-import { handleErrorApi } from '@/lib/utils'
-import { useToast } from '@/components/ui/use-toast'
+import { generateSocketInstance, handleErrorApi } from '@/lib/utils'
 import { path } from '@/constants'
 import { useAppContext } from '@/providers'
 
@@ -21,8 +20,7 @@ export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const clearTokens = searchParams.get('clearTokens')
-  const toast = useToast()
-  const { setRole } = useAppContext()
+  const { setRole, setSocket } = useAppContext()
   const loginMutation = useLoginMutation()
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -34,7 +32,7 @@ export function LoginForm() {
 
   useEffect(() => {
     if (clearTokens) {
-      setRole()
+      setRole(undefined)
     }
   }, [clearTokens, setRole])
 
@@ -45,9 +43,8 @@ export function LoginForm() {
       const response = await loginMutation.mutateAsync(payload)
 
       setRole(response.payload.data.account.role)
-
-      toast.toast({ description: response.payload.message })
       router.push(path.MANAGE_DASHBOARD)
+      setSocket(generateSocketInstance(response.payload.data.accessToken))
     } catch (error) {
       handleErrorApi({
         error

@@ -4,28 +4,29 @@ import { useEffect } from 'react'
 import { path } from '@/constants'
 import { checkAndRefreshToken } from '@/lib/utils'
 import { useAppContext } from '@/providers'
-import { socket } from '@/lib/socket'
 
 const UNAUTHENTICATED_PATH_LIST: string[] = [path.LOGIN, path.LOGOUT, path.REFRESH_TOKEN]
 
 export default function RefreshToken() {
   const router = useRouter()
   const pathname = usePathname()
-  const { setRole } = useAppContext()
+  const { setRole, socket, disconnectSocket } = useAppContext()
 
   useEffect(() => {
     if (UNAUTHENTICATED_PATH_LIST.includes(pathname)) return
 
     let interval: any = null
 
-    const handleError = () => {
-      clearInterval(interval)
-      setRole()
-      router.push(path.LOGIN)
-    }
-
     const handleRefreshToken = (force?: boolean) => {
-      checkAndRefreshToken({ onError: handleError, force })
+      checkAndRefreshToken({
+        onError: () => {
+          clearInterval(interval)
+          setRole(undefined)
+          disconnectSocket()
+          router.push(path.LOGIN)
+        },
+        force
+      })
     }
 
     handleRefreshToken()
@@ -35,7 +36,7 @@ export default function RefreshToken() {
     interval = setInterval(handleRefreshToken, TIMEOUT)
 
     function onConnect() {
-      console.log(socket.id)
+      console.log(socket?.id)
     }
 
     function onRefreshTokenSocket() {
@@ -46,17 +47,17 @@ export default function RefreshToken() {
       console.log('disconnected')
     }
 
-    socket.on('connect', onConnect)
-    socket.on('refresh-token', onRefreshTokenSocket)
-    socket.on('disconnect', onDisconnect)
+    socket?.on('connect', onConnect)
+    socket?.on('refresh-token', onRefreshTokenSocket)
+    socket?.on('disconnect', onDisconnect)
 
     return () => {
       clearInterval(interval)
-      socket.off('connect', onConnect)
-      socket.off('refresh-token', onRefreshTokenSocket)
-      socket.off('disconnect', onDisconnect)
+      socket?.off('connect', onConnect)
+      socket?.off('refresh-token', onRefreshTokenSocket)
+      socket?.off('disconnect', onDisconnect)
     }
-  }, [pathname, router, setRole])
+  }, [pathname, router, setRole, socket, disconnectSocket])
 
   return null
 }

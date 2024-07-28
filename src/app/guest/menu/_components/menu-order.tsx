@@ -17,7 +17,7 @@ export function MenuOrder() {
   const guestAddOrderMutation = useGuestAddOrderMutation()
   const { data } = useDishListQuery()
 
-  const dishes = data?.payload?.data || []
+  const dishes = useMemo(() => data?.payload?.data || [], [data?.payload?.data])
   const isDisabledOrderBtn = orderList.length === 0 || guestAddOrderMutation.isPending
 
   const totalPrice = useMemo(() => {

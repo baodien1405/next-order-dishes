@@ -33,9 +33,9 @@ import { EditOrder } from '@/app/manage/orders/_components/edit-order'
 import { OrderStatics } from '@/app/manage/orders/_components/order-statics'
 import { useOrderListQuery, useTableListQuery, useUpdateOrderMutation } from '@/hooks'
 import { TableSkeleton } from '@/app/manage/orders/_components/table-skeleton'
-import { socket } from '@/lib/socket'
 import { useToast } from '@/components/ui/use-toast'
 import { GuestCreateOrdersResType } from '@/schemaValidations/guest.schema'
+import { useAppContext } from '@/providers'
 
 export const OrderTableContext = createContext({
   setOrderIdEdit: (value: number | undefined) => {},
@@ -63,6 +63,7 @@ const initToDate = endOfDay(new Date())
 
 export function OrderTable() {
   const toast = useToast()
+  const { socket } = useAppContext()
   const searchParam = useSearchParams()
   const [openStatusFilter, setOpenStatusFilter] = useState(false)
   const [fromDate, setFromDate] = useState(initFromDate)
@@ -143,12 +144,12 @@ export function OrderTable() {
   }, [table, pageIndex])
 
   useEffect(() => {
-    if (socket.connected) {
+    if (socket?.connected) {
       onConnect()
     }
 
     function onConnect() {
-      console.log(socket.id)
+      console.log(socket?.id)
     }
 
     function onDisconnect() {
@@ -198,20 +199,20 @@ export function OrderTable() {
       refetch()
     }
 
-    socket.on('update-order', onOrderUpdate)
-    socket.on('new-order', onNewOrder)
-    socket.on('payment', onPayment)
-    socket.on('connect', onConnect)
-    socket.on('disconnect', onDisconnect)
+    socket?.on('update-order', onOrderUpdate)
+    socket?.on('new-order', onNewOrder)
+    socket?.on('payment', onPayment)
+    socket?.on('connect', onConnect)
+    socket?.on('disconnect', onDisconnect)
 
     return () => {
-      socket.off('connect', onConnect)
-      socket.off('disconnect', onDisconnect)
-      socket.off('update-order', onOrderUpdate)
-      socket.off('new-order', onNewOrder)
-      socket.off('payment', onPayment)
+      socket?.off('connect', onConnect)
+      socket?.off('disconnect', onDisconnect)
+      socket?.off('update-order', onOrderUpdate)
+      socket?.off('new-order', onNewOrder)
+      socket?.off('payment', onPayment)
     }
-  }, [fromDate, refetchOrderList, toDate, toast])
+  }, [fromDate, refetchOrderList, toDate, toast, socket])
 
   const resetDateFilter = () => {
     setFromDate(initFromDate)

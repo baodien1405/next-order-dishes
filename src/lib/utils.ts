@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx'
+import { io } from 'socket.io-client'
 import { UseFormSetError } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { jwtDecode } from 'jwt-decode'
@@ -164,6 +165,14 @@ export const formatDateTimeToLocaleString = (date: string | Date) => {
 
 export const formatDateTimeToTimeString = (date: string | Date) => {
   return format(date instanceof Date ? date : new Date(date), 'HH:mm:ss')
+}
+
+export const generateSocketInstance = (accessToken: string) => {
+  return io(envConfig.NEXT_PUBLIC_API_ENDPOINT, {
+    auth: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })
 }
 
 export const OrderStatusIcon = {
