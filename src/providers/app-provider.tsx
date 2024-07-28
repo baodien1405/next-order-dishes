@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import RefreshToken from '@/components/refresh-token'
+import ListenLogoutSocket from '@/components/listen-logout-socket'
 import { getAccessTokenFromLS, removeAccessTokenToLS, removeRefreshTokenToLS } from '@/lib/common'
 import { RoleType, TokenPayload } from '@/types'
 import { generateSocketInstance } from '@/lib/utils'
@@ -76,6 +77,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       <QueryClientProvider client={queryClient}>
         {children}
         <RefreshToken />
+        <ListenLogoutSocket />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </AppContext.Provider>
