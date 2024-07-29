@@ -68,7 +68,8 @@ export const checkAndRefreshToken = async (params?: {
   const decodeAccessToken = jwtDecode<TokenPayload>(accessToken)
   const decodeRefreshToken = jwtDecode<TokenPayload>(refreshToken)
 
-  const now = Math.round(new Date().getTime() / 1000)
+  const COOKIE_SET_DELAY_SECONDS = 1
+  const now = new Date().getTime() / 1000 - COOKIE_SET_DELAY_SECONDS
 
   const isExpiredRefreshToken = decodeRefreshToken.exp <= now
 
