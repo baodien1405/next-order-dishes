@@ -54,5 +54,11 @@ export const authService = {
     const response = await this.refreshTokenRequest
     this.refreshTokenRequest = null
     return response
+  },
+
+  setTokenToCookie(body: { accessToken: string; refreshToken: string }) {
+    return http.post('/api/auth/token', body, {
+      baseUrl: ''
+    })
   }
 }
