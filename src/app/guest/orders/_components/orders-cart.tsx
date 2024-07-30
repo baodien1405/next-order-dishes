@@ -3,17 +3,16 @@
 import { useEffect, useMemo } from 'react'
 import Image from 'next/image'
 
-import { useGuestGetOrderListQuery } from '@/hooks'
+import { useAppStore, useGuestGetOrderListQuery } from '@/hooks'
 import { formatCurrency, getVietnameseOrderStatus } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { PayGuestOrdersResType, UpdateOrderResType } from '@/schemaValidations/order.schema'
 import { useToast } from '@/components/ui/use-toast'
 import { OrderStatus } from '@/constants'
-import { useAppContext } from '@/providers'
 
 export function OrdersCart() {
   const toast = useToast()
-  const { socket } = useAppContext()
+  const socket = useAppStore((state) => state.socket)
   const { data, refetch } = useGuestGetOrderListQuery()
   const orderList = useMemo(() => data?.payload.data || [], [data?.payload.data])
 

@@ -13,15 +13,16 @@ import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { GuestLoginBody, GuestLoginBodyType } from '@/schemaValidations/guest.schema'
 import { path } from '@/constants'
 import { generateSocketInstance, handleErrorApi } from '@/lib/utils'
-import { useGuestLoginMutation } from '@/hooks'
-import { useAppContext } from '@/providers'
+import { useAppStore, useGuestLoginMutation } from '@/hooks'
 
 export function GuestLoginForm() {
   const router = useRouter()
   const params = useParams()
   const searchParams = useSearchParams()
   const guestLoginMutation = useGuestLoginMutation()
-  const { setRole, setSocket } = useAppContext()
+  const setRole = useAppStore((state) => state.setRole)
+  const setSocket = useAppStore((state) => state.setSocket)
+
   const tableNumber = Number(params.number)
   const token = searchParams.get('token')
 

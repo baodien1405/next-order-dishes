@@ -4,9 +4,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useRef } from 'react'
 
 import { path } from '@/constants'
-import { useLogoutMutation } from '@/hooks'
+import { useAppStore, useLogoutMutation } from '@/hooks'
 import { getAccessTokenFromLS, getRefreshTokenFromLS } from '@/lib/common'
-import { useAppContext } from '@/providers'
 
 function Logout() {
   const router = useRouter()
@@ -17,7 +16,8 @@ function Logout() {
   const refreshTokenFromUrl = searchParams.get('refreshToken')
   const accessTokenFromUrl = searchParams.get('accessToken')
 
-  const { setRole, disconnectSocket } = useAppContext()
+  const setRole = useAppStore((state) => state.setRole)
+  const disconnectSocket = useAppStore((state) => state.disconnectSocket)
   const { mutateAsync } = useLogoutMutation()
 
   useEffect(() => {

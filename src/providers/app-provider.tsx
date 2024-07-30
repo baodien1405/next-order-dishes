@@ -1,16 +1,16 @@
 'use client'
 
-import type { Socket } from 'socket.io-client'
-import { jwtDecode } from 'jwt-decode'
-import { ReactNode, useContext, createContext, useState, useCallback, useEffect, useRef } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { jwtDecode } from 'jwt-decode'
+import { ReactNode, useEffect, useRef } from 'react'
 
-import RefreshToken from '@/components/refresh-token'
 import ListenLogoutSocket from '@/components/listen-logout-socket'
-import { getAccessTokenFromLS, removeAccessTokenToLS, removeRefreshTokenToLS } from '@/lib/common'
-import { RoleType, TokenPayload } from '@/types'
+import RefreshToken from '@/components/refresh-token'
+import { useAppStore } from '@/hooks'
+import { getAccessTokenFromLS } from '@/lib/common'
 import { generateSocketInstance } from '@/lib/utils'
+import { TokenPayload } from '@/types'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,27 +20,9 @@ const queryClient = new QueryClient({
   }
 })
 
-const AppContext = createContext({
-  isAuth: false,
-  role: undefined as RoleType | undefined,
-  setRole: (role?: RoleType) => {},
-  socket: undefined as Socket | undefined,
-  setSocket: (socket?: Socket) => {},
-  disconnectSocket: () => {}
-})
-
-export const useAppContext = () => {
-  const context = useContext(AppContext)
-
-  if (!context) throw Error('useAppContext must be within AppProvider')
-
-  return context
-}
-
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [socket, setSocket] = useState<Socket | undefined>()
-  const [role, setRoleState] = useState<RoleType>()
-  const isAuth = Boolean(role)
+  const setSocket = useAppStore((state) => state.setSocket)
+  const setRole = useAppStore((state) => state.setRole)
   const socketCountRef = useRef(0)
 
   useEffect(() => {
@@ -49,37 +31,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
       if (accessToken) {
         const role = jwtDecode<TokenPayload>(accessToken).role
-        setRoleState(role)
+        setRole(role)
 
         setSocket(generateSocketInstance(accessToken))
       }
     }
 
     socketCountRef.current++
-  }, [setRoleState])
-
-  const setRole = useCallback((role?: RoleType) => {
-    setRoleState(role)
-
-    if (!role) {
-      removeAccessTokenToLS()
-      removeRefreshTokenToLS()
-    }
-  }, [])
-
-  const disconnectSocket = useCallback(() => {
-    socket?.disconnect()
-    setSocket(undefined)
-  }, [socket, setSocket])
+  }, [setRole, setSocket])
 
   return (
-    <AppContext.Provider value={{ isAuth, role, setRole, socket, setSocket, disconnectSocket }}>
-      <QueryClientProvider client={queryClient}>
-        {children}
-        <RefreshToken />
-        <ListenLogoutSocket />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </AppContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <RefreshToken />
+      <ListenLogoutSocket />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   )
 }

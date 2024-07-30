@@ -12,10 +12,9 @@ import { Label } from '@/components/ui/label'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoginBody, LoginBodyType } from '@/schemaValidations/auth.schema'
-import { useLoginMutation } from '@/hooks'
+import { useAppStore, useLoginMutation } from '@/hooks'
 import { generateSocketInstance, handleErrorApi } from '@/lib/utils'
 import { path } from '@/constants'
-import { useAppContext } from '@/providers'
 import { envConfig } from '@/configs'
 
 const getOauthGoogleUrl = () => {
@@ -40,7 +39,8 @@ export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const clearTokens = searchParams.get('clearTokens')
-  const { setRole, setSocket } = useAppContext()
+  const setSocket = useAppStore((state) => state.setSocket)
+  const setRole = useAppStore((state) => state.setRole)
   const loginMutation = useLoginMutation()
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),

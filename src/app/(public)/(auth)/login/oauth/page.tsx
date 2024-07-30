@@ -4,18 +4,18 @@ import { jwtDecode } from 'jwt-decode'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
-import { useAppContext } from '@/providers'
 import { TokenPayload } from '@/types'
 import { generateSocketInstance } from '@/lib/utils'
 import { path } from '@/constants'
 import { useToast } from '@/components/ui/use-toast'
-import { useSetTokenToCookieMutation } from '@/hooks'
+import { useAppStore, useSetTokenToCookieMutation } from '@/hooks'
 
 export default function OAuthPage() {
   const router = useRouter()
   const toast = useToast()
   const { mutateAsync } = useSetTokenToCookieMutation()
-  const { setRole, setSocket } = useAppContext()
+  const setRole = useAppStore((state) => state.setRole)
+  const setSocket = useAppStore((state) => state.setSocket)
   const countRef = useRef(0)
   const searchParams = useSearchParams()
   const accessToken = searchParams.get('accessToken')

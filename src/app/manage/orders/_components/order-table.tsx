@@ -31,11 +31,10 @@ import orderTableColumns from '@/app/manage/orders/_components/order-table-colum
 import { AddOrder } from '@/app/manage/orders/_components/add-order'
 import { EditOrder } from '@/app/manage/orders/_components/edit-order'
 import { OrderStatics } from '@/app/manage/orders/_components/order-statics'
-import { useOrderListQuery, useTableListQuery, useUpdateOrderMutation } from '@/hooks'
+import { useAppStore, useOrderListQuery, useTableListQuery, useUpdateOrderMutation } from '@/hooks'
 import { TableSkeleton } from '@/app/manage/orders/_components/table-skeleton'
 import { useToast } from '@/components/ui/use-toast'
 import { GuestCreateOrdersResType } from '@/schemaValidations/guest.schema'
-import { useAppContext } from '@/providers'
 
 export const OrderTableContext = createContext({
   setOrderIdEdit: (value: number | undefined) => {},
@@ -63,7 +62,7 @@ const initToDate = endOfDay(new Date())
 
 export function OrderTable() {
   const toast = useToast()
-  const { socket } = useAppContext()
+  const socket = useAppStore((state) => state.socket)
   const searchParam = useSearchParams()
   const [openStatusFilter, setOpenStatusFilter] = useState(false)
   const [fromDate, setFromDate] = useState(initFromDate)

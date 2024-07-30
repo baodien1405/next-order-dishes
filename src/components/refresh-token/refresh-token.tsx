@@ -3,14 +3,16 @@ import { useEffect } from 'react'
 
 import { path } from '@/constants'
 import { checkAndRefreshToken } from '@/lib/utils'
-import { useAppContext } from '@/providers'
+import { useAppStore } from '@/hooks'
 
 const UNAUTHENTICATED_PATH_LIST: string[] = [path.LOGIN, path.LOGOUT, path.REFRESH_TOKEN]
 
 export default function RefreshToken() {
   const router = useRouter()
   const pathname = usePathname()
-  const { setRole, socket, disconnectSocket } = useAppContext()
+  const setRole = useAppStore((state) => state.setRole)
+  const socket = useAppStore((state) => state.socket)
+  const disconnectSocket = useAppStore((state) => state.disconnectSocket)
 
   useEffect(() => {
     if (UNAUTHENTICATED_PATH_LIST.includes(pathname)) return

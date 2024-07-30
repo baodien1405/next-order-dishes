@@ -7,11 +7,11 @@ import { usePathname } from 'next/navigation'
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { menuItems } from '@/constants'
-import { useAppContext } from '@/providers'
+import { useAppStore } from '@/hooks'
 
 export function NavLinks() {
   const pathname = usePathname()
-  const { role } = useAppContext()
+  const role = useAppStore((state) => state.role)
 
   return (
     <TooltipProvider>

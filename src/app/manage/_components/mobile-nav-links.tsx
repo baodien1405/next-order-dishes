@@ -8,11 +8,11 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import { menuItems } from '@/constants'
-import { useAppContext } from '@/providers'
+import { useAppStore } from '@/hooks'
 
 export function MobileNavLinks() {
   const pathname = usePathname()
-  const { role } = useAppContext()
+  const role = useAppStore((state) => state.role)
 
   return (
     <Sheet>

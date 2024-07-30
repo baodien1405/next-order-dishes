@@ -15,11 +15,10 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 
-import { useAppContext } from '@/providers'
 import { path, Role } from '@/constants'
 import { RoleType } from '@/types'
 import { cn, handleErrorApi } from '@/lib/utils'
-import { useLogoutMutation } from '@/hooks'
+import { useAppStore, useLogoutMutation } from '@/hooks'
 
 interface MenuItem {
   title: string
@@ -57,7 +56,9 @@ const menuItems: MenuItem[] = [
 
 export default function NavItems({ className }: { className?: string }) {
   const router = useRouter()
-  const { role, setRole, disconnectSocket } = useAppContext()
+  const setRole = useAppStore((state) => state.setRole)
+  const role = useAppStore((state) => state.role)
+  const disconnectSocket = useAppStore((state) => state.disconnectSocket)
   const logoutMutation = useLogoutMutation()
 
   const handleLogout = async () => {

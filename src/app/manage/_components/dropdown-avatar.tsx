@@ -14,14 +14,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { handleErrorApi } from '@/lib/utils'
-import { useLogoutMutation } from '@/hooks'
+import { useAppStore, useLogoutMutation } from '@/hooks'
 import { path } from '@/constants'
 import { useAccountMeQuery } from '@/hooks'
-import { useAppContext } from '@/providers'
 
 export function DropdownAvatar() {
   const router = useRouter()
-  const { setRole, disconnectSocket } = useAppContext()
+  const setRole = useAppStore((state) => state.setRole)
+  const disconnectSocket = useAppStore((state) => state.disconnectSocket)
   const logoutMutation = useLogoutMutation()
   const { data } = useAccountMeQuery()
   const profile = data?.payload.data
