@@ -1,18 +1,13 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
-import { formatCurrency } from '@/lib/utils'
-import { DishListResType } from '@/schemaValidations/dish.schema'
+import { path } from '@/constants'
 import { dishService } from '@/services'
+import { formatCurrency, wrapServerApi } from '@/lib/utils'
 
 export default async function Home() {
-  let dishList: DishListResType['data'] = []
-
-  try {
-    const response = await dishService.getAll()
-    dishList = response.payload?.data || []
-  } catch (error) {
-    return <div>Something went wrong</div>
-  }
+  const response = await wrapServerApi(() => dishService.getAll())
+  const dishList = response?.payload?.data || []
 
   return (
     <div className="w-full space-y-4">
@@ -36,7 +31,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {dishList.map((dish) => (
             <div className="flex gap-4 w" key={dish.id}>
-              <div className="flex-shrink-0">
+              <Link href={`${path.DISHES}/${dish.id}`} className="flex-shrink-0">
                 <Image
                   src={dish.image}
                   width={150}
@@ -44,7 +39,7 @@ export default async function Home() {
                   alt={dish.name}
                   className="object-cover w-[150px] h-[150px] rounded-md"
                 />
-              </div>
+              </Link>
               <div className="space-y-1">
                 <h3 className="text-xl font-semibold">{dish.name}</h3>
                 <p className="">{dish.description}</p>

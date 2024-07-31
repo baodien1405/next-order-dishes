@@ -5,5 +5,6 @@ export const path = {
   REFRESH_TOKEN: '/refresh-token',
   MANAGE_DASHBOARD: '/manage/dashboard',
   GUEST_MENU: '/guest/menu',
-  GUEST_ORDERS: '/guest/orders'
+  GUEST_ORDERS: '/guest/orders',
+  DISHES: '/dishes'
 } as const
