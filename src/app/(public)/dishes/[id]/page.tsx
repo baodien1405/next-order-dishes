@@ -13,7 +13,9 @@ export default async function DishDetailPage({ params }: { params: { id: string 
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl lg:text-3xl font-semibold">{dish.name}</h1>
+      <div className="text-gray-700 shadow-md p-3 border-gray-300 ml-4 h-24 flex border-2"></div>
+
+      <h1 className="text-2xl lg:text-3xl font-semibold flex">{dish.name}</h1>
 
       <div className="font-semibold">Giá: {formatCurrency(dish.price)}</div>
 
