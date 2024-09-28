@@ -1,3 +1,4 @@
+import { Modal } from '@/app/(public)/@modal/(.)dishes/[id]/_components'
 import { DishDetail } from '@/app/(public)/dishes/[id]/_components'
 import { wrapServerApi } from '@/lib/utils'
 import { dishService } from '@/services'
@@ -10,5 +11,9 @@ export default async function DishDetailPage({ params }: { params: { id: string 
     return <h1 className="text-2xl lg:text-3xl font-semibold">Món ăn không tồn tại</h1>
   }
 
-  return <DishDetail dish={dish} />
+  return (
+    <Modal>
+      <DishDetail dish={dish} />
+    </Modal>
+  )
 }

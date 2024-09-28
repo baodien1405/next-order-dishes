@@ -15,6 +15,5 @@
   "trailingComma": "none",
   "useTabs": false,
   "vueIndentScriptAndStyle": false,
-  "printWidth": 120,
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "printWidth": 120
 }
