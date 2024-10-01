@@ -1,17 +1,24 @@
-import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { jwtDecode } from 'jwt-decode'
+import createMiddleware from 'next-intl/middleware'
 
 import { Role, path } from '@/constants'
 import { TokenPayload } from '@/types'
+import { defaultLocale, locales } from '@/i18n/config'
 
-const managePaths = ['/manage']
-const guestPaths = ['/guest']
-const onlyOwnerPaths = ['/manage/accounts']
-const privatePaths = ['/manage', '/guest']
-const authPaths = ['/login']
+const managePaths = ['/en/manage', '/vi/manage']
+const guestPaths = ['/en/guest', '/vi/guest']
+const onlyOwnerPaths = ['/en/manage/accounts', '/vi/manage/accounts']
+const privatePaths = [...managePaths, ...guestPaths]
+const authPaths = ['/en/login', '/vi/login']
 
 export function middleware(request: NextRequest) {
+  const handleI18nRouting = createMiddleware({
+    locales,
+    defaultLocale
+  })
+
+  const response = handleI18nRouting(request)
   const { pathname } = request.nextUrl
   const accessToken = request.cookies.get('accessToken')?.value
   const refreshToken = request.cookies.get('refreshToken')?.value
@@ -20,13 +27,16 @@ export function middleware(request: NextRequest) {
     const url = new URL(path.LOGIN, request.url)
 
     url.searchParams.set('clearTokens', 'true')
+    response.headers.set('x-middleware-rewrite', url.toString())
 
-    return NextResponse.redirect(url)
+    return response
   }
 
   if (refreshToken) {
     if (authPaths.some((path) => pathname.startsWith(path))) {
-      return NextResponse.redirect(new URL(path.HOME, request.url))
+      response.headers.set('x-middleware-rewrite', new URL(path.HOME, request.url).toString())
+
+      return response
     }
 
     if (privatePaths.some((path) => pathname.startsWith(path)) && !accessToken) {
@@ -34,8 +44,9 @@ export function middleware(request: NextRequest) {
 
       url.searchParams.set('refreshToken', refreshToken)
       url.searchParams.set('redirect', pathname)
+      response.headers.set('x-middleware-rewrite', url.toString())
 
-      return NextResponse.redirect(url)
+      return response
     }
 
     const role = jwtDecode<TokenPayload>(refreshToken).role
@@ -45,13 +56,17 @@ export function middleware(request: NextRequest) {
     const isNotOwnerGoToOwnerPath = role !== Role.Owner && onlyOwnerPaths.some((path) => pathname.startsWith(path))
 
     if (isGuestGoToManagePath || isNotGuestGoToGuestPath || isNotOwnerGoToOwnerPath) {
-      return NextResponse.redirect(new URL(path.HOME, request.url))
+      response.headers.set('x-middleware-rewrite', new URL(path.HOME, request.url).toString())
+
+      return response
     }
+
+    return response
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {
-  matcher: ['/manage/:path*', '/guest/:path*', '/login']
+  matcher: ['/', '/(vi|en)/:path*', '/((?!_next|_vercel|.*\\..*).*)']
 }

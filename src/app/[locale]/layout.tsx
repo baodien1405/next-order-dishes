@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
-import { getLocale, getMessages } from 'next-intl/server'
+import { getMessages } from 'next-intl/server'
 
 import { cn } from '@/lib/utils'
 import { AppProvider, ThemeProvider } from '@/providers'
@@ -20,11 +20,12 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({
-  children
+  children,
+  params: { locale }
 }: Readonly<{
   children: React.ReactNode
+  params: { locale: string }
 }>) {
-  const locale = await getLocale()
   const messages = await getMessages()
 
   return (
