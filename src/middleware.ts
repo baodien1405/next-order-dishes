@@ -4,7 +4,7 @@ import createMiddleware from 'next-intl/middleware'
 
 import { Role, path } from '@/constants'
 import { TokenPayload } from '@/types'
-import { defaultLocale, locales } from '@/i18n/config'
+import { routing } from '@/i18n/routing'
 
 const managePaths = ['/vi/manage', '/en/manage']
 const guestPaths = ['/vi/guest', '/en/guest']
@@ -13,16 +13,13 @@ const privatePaths = [...managePaths, ...guestPaths]
 const authPaths = ['/vi/login', '/en/login']
 
 export function middleware(request: NextRequest) {
-  const handleI18nRouting = createMiddleware({
-    locales,
-    defaultLocale
-  })
+  const handleI18nRouting = createMiddleware(routing)
 
   const response = handleI18nRouting(request)
   const { pathname } = request.nextUrl
   const accessToken = request.cookies.get('accessToken')?.value
   const refreshToken = request.cookies.get('refreshToken')?.value
-  const locale = request.cookies.get('NEXT_LOCALE')?.value ?? defaultLocale
+  const locale = request.cookies.get('NEXT_LOCALE')?.value ?? routing.defaultLocale
 
   if (privatePaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
     const url = new URL(`/${locale}${path.LOGIN}`, request.url)

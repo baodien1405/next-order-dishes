@@ -42,9 +42,10 @@ import {
 import { formatCurrency, getVietnameseDishStatus, handleErrorApi } from '@/lib/utils'
 import AutoPagination from '@/components/auto-pagination'
 import { DishListResType } from '@/schemaValidations/dish.schema'
-import { EditDish, AddDish } from '@/app/manage/dishes/_components'
 import { useDeleteDishMutation, useDishListQuery } from '@/hooks'
 import { useToast } from '@/components/ui/use-toast'
+import { EditDish } from '@/app/[locale]/manage/dishes/_components/edit-dish'
+import { AddDish } from '@/app/[locale]/manage/dishes/_components/add-dish'
 
 type DishItem = DishListResType['data'][0]
 

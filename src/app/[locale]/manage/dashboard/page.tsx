@@ -1,4 +1,4 @@
-import { DashboardMain } from '@/app/manage/dashboard/_components'
+import { DashboardMain } from '@/app/[locale]/manage/dashboard/_components'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default async function Dashboard() {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -14,6 +14,7 @@ import { GuestLoginBody, GuestLoginBodyType } from '@/schemaValidations/guest.sc
 import { path } from '@/constants'
 import { generateSocketInstance, handleErrorApi } from '@/lib/utils'
 import { useAppStore, useGuestLoginMutation } from '@/hooks'
+import { useRouter } from '@/i18n/routing'
 
 export function GuestLoginForm() {
   const router = useRouter()

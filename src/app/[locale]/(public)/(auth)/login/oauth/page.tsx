@@ -1,7 +1,7 @@
 'use client'
 
 import { jwtDecode } from 'jwt-decode'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
 import { TokenPayload } from '@/types'
@@ -9,6 +9,7 @@ import { generateSocketInstance } from '@/lib/utils'
 import { path } from '@/constants'
 import { useToast } from '@/components/ui/use-toast'
 import { useAppStore, useSetTokenToCookieMutation } from '@/hooks'
+import { useRouter } from '@/i18n/routing'
 
 export default function OAuthPage() {
   const router = useRouter()

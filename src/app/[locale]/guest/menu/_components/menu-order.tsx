@@ -2,14 +2,15 @@
 
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
 
+import { useRouter } from '@/i18n/routing'
 import { Button } from '@/components/ui/button'
 import { useDishListQuery, useGuestAddOrderMutation } from '@/hooks'
 import { cn, formatCurrency, handleErrorApi } from '@/lib/utils'
-import { OrderQuantity } from '@/app/guest/menu/_components'
+
 import { GuestCreateOrdersBodyType } from '@/schemaValidations/guest.schema'
 import { DishStatus, path } from '@/constants'
+import { OrderQuantity } from '@/app/[locale]/guest/menu/_components'
 
 export function MenuOrder() {
   const router = useRouter()

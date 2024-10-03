@@ -1,11 +1,12 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useRef } from 'react'
 
 import { path } from '@/constants'
 import { useAppStore, useLogoutMutation } from '@/hooks'
 import { getAccessTokenFromLS, getRefreshTokenFromLS } from '@/lib/common'
+import { useRouter } from '@/i18n/routing'
 
 function Logout() {
   const router = useRouter()

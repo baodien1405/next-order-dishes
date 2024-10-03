@@ -1,25 +1,21 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Locale, locales } from '@/i18n/config'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from '@/i18n/routing'
 
 export default function SwitchLanguage() {
   const t = useTranslations('SwitchLanguage')
   const locale = useLocale()
   const pathname = usePathname()
   const router = useRouter()
-  const params = useParams()
-  const searchParams = useSearchParams()
 
   const handleLanguageChange = (value: string) => {
-    const locale = params.locale as Locale
-    const newPathname = pathname.replace(`/${locale}`, `/${value}`)
-    const fullUrl = `${newPathname}?${searchParams.toString()}`
-
-    router.replace(fullUrl)
+    router.replace(pathname, {
+      locale: value as Locale
+    })
     router.refresh()
   }
 

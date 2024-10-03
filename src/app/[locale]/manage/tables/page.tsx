@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 
-import { TableTable } from '@/app/manage/tables/_components'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { TableTable } from '@/app/[locale]/manage/tables/_components'
 
 export default function TablesPage() {
   return (

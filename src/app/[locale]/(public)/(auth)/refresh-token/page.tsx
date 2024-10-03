@@ -1,11 +1,12 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Suspense, useEffect } from 'react'
 
 import { path } from '@/constants'
 import { getRefreshTokenFromLS } from '@/lib/common'
 import { checkAndRefreshToken } from '@/lib/utils'
+import { useRouter } from '@/i18n/routing'
 
 function RefreshToken() {
   const router = useRouter()

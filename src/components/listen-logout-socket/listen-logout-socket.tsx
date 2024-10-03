@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
 
+import { usePathname, useRouter } from '@/i18n/routing'
 import { path } from '@/constants'
 import { useAppStore, useLogoutMutation } from '@/hooks'
 import { handleErrorApi } from '@/lib/utils'

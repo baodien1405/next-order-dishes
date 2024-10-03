@@ -10,8 +10,12 @@ import { Badge } from '@/components/ui/badge'
 import { OrderStatusIcon, cn, getVietnameseOrderStatus } from '@/lib/utils'
 import { OrderStatus, OrderStatusValues } from '@/constants/type'
 import { TableListResType } from '@/schemaValidations/table.schema'
-import { ServingGuestByTableNumber, Statics, StatusCountObject } from '@/app/manage/orders/_components/order-table'
-import { OrderGuestDetail } from '@/app/manage/orders/_components/order-guest-detail'
+import {
+  ServingGuestByTableNumber,
+  Statics,
+  StatusCountObject
+} from '@/app/[locale]/manage/orders/_components/order-table'
+import { OrderGuestDetail } from '@/app/[locale]/manage/orders/_components/order-guest-detail'
 
 // Ví dụ:
 // const statics: Statics = {

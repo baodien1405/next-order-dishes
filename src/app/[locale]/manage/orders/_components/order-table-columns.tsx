@@ -21,8 +21,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { GetOrdersResType } from '@/schemaValidations/order.schema'
 import { formatCurrency, formatDateTimeToLocaleString, getVietnameseOrderStatus, simpleMatchText } from '@/lib/utils'
 import { OrderStatus, OrderStatusValues } from '@/constants/type'
-import { OrderTableContext } from '@/app/manage/orders/_components/order-table'
-import { OrderGuestDetail } from '@/app/manage/orders/_components/order-guest-detail'
+import { OrderTableContext } from '@/app/[locale]/manage/orders/_components/order-table'
+import { OrderGuestDetail } from '@/app/[locale]/manage/orders/_components/order-guest-detail'
 
 type OrderItem = GetOrdersResType['data'][0]
 

@@ -1,4 +1,4 @@
-import { DropdownAvatar, MobileNavLinks, NavLinks } from '@/app/manage/_components'
+import { DropdownAvatar, MobileNavLinks, NavLinks } from '@/app/[locale]/manage/_components'
 import DarkModeToggle from '@/components/dark-mode-toggle'
 
 export default function Layout({

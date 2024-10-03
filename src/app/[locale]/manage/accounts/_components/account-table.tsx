@@ -41,10 +41,12 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 import AutoPagination from '@/components/auto-pagination'
-import { AddEmployee, EditEmployee } from '@/app/manage/accounts/_components'
+
 import { useAccountListQuery, useDeleteAccountMutation } from '@/hooks'
 import { handleErrorApi } from '@/lib/utils'
 import { useToast } from '@/components/ui/use-toast'
+import { EditEmployee } from '@/app/[locale]/manage/accounts/_components/edit-employee'
+import { AddEmployee } from '@/app/[locale]/manage/accounts/_components/add-employee'
 
 type AccountItem = AccountListResType['data'][0]
 

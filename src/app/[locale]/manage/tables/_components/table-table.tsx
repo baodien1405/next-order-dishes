@@ -41,10 +41,11 @@ import {
 import { getVietnameseTableStatus, handleErrorApi } from '@/lib/utils'
 import AutoPagination from '@/components/auto-pagination'
 import { TableListResType } from '@/schemaValidations/table.schema'
-import { AddTable, EditTable } from '@/app/manage/tables/_components'
 import { useDeleteTableMutation, useTableListQuery } from '@/hooks'
 import QRCodeTable from '@/components/qrcode-table'
 import { useToast } from '@/components/ui/use-toast'
+import { EditTable } from '@/app/[locale]/manage/tables/_components/edit-table'
+import { AddTable } from '@/app/[locale]/manage/tables/_components/add-table'
 
 type TableItem = TableListResType['data'][0]
 

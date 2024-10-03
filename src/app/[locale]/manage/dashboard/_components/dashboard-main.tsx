@@ -6,9 +6,10 @@ import { endOfDay, format, startOfDay } from 'date-fns'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { RevenueLineChart, DishBarChart } from '@/app/manage/dashboard/_components'
 import { useDashboardIndicatorsQuery } from '@/hooks/queries'
 import { formatCurrency } from '@/lib/utils'
+import { RevenueLineChart } from '@/app/[locale]/manage/dashboard/_components/revenue-line-chart'
+import { DishBarChart } from '@/app/[locale]/manage/dashboard/_components/dish-bar-chart'
 
 const initFromDate = startOfDay(new Date())
 const initToDate = endOfDay(new Date())

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { OrderStatus } from '@/constants/type'
 import { GetOrdersResType } from '@/schemaValidations/order.schema'
-import { OrderObjectByGuestID, ServingGuestByTableNumber, Statics } from '@/app/manage/orders/_components/order-table'
+import { OrderObjectByGuestID, ServingGuestByTableNumber, Statics } from '@/app/[locale]/manage/orders/_components'
 
 export const useOrderService = (orderList: GetOrdersResType['data']) => {
   const result = useMemo(() => {

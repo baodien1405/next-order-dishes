@@ -1,4 +1,4 @@
-import { DishDetail } from '@/app/(public)/dishes/[id]/_components'
+import { DishDetail } from '@/app/[locale]/(public)/dishes/[id]/_components'
 import { wrapServerApi } from '@/lib/utils'
 import { dishService } from '@/services'
 

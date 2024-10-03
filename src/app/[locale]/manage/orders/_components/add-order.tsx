@@ -17,12 +17,13 @@ import { Switch } from '@/components/ui/switch'
 import { CreateOrdersBodyType } from '@/schemaValidations/order.schema'
 import { GuestLoginBody, GuestLoginBodyType } from '@/schemaValidations/guest.schema'
 
-import { OrderQuantity } from '@/app/guest/menu/_components'
 import { cn, formatCurrency, handleErrorApi } from '@/lib/utils'
 import { DishStatus } from '@/constants/type'
-import { TablesDialog, GuestsDialog } from '@/app/manage/orders/_components'
 import { useAddOrderMutation, useCreateGuestMutation, useDishListQuery } from '@/hooks'
 import { useToast } from '@/components/ui/use-toast'
+import { TablesDialog } from '@/app/[locale]/manage/orders/_components/tables-dialog'
+import { GuestsDialog } from '@/app/[locale]/manage/orders/_components/guests-dialog'
+import { OrderQuantity } from '@/app/[locale]/guest/menu/_components'
 
 export function AddOrder() {
   const toast = useToast()

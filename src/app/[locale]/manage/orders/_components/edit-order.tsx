@@ -15,9 +15,9 @@ import { UpdateOrderBody, UpdateOrderBodyType } from '@/schemaValidations/order.
 import { DishListResType } from '@/schemaValidations/dish.schema'
 import { getVietnameseOrderStatus, handleErrorApi } from '@/lib/utils'
 import { OrderStatus, OrderStatusValues } from '@/constants/type'
-import { DishesDialog } from '@/app/manage/orders/_components/dishes-dialog'
 import { useOrderDetailQuery, useUpdateOrderMutation } from '@/hooks'
 import { useToast } from '@/components/ui/use-toast'
+import { DishesDialog } from '@/app/[locale]/manage/orders/_components/dishes-dialog'
 
 export function EditOrder({
   id,

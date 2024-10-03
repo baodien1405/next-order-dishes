@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { AccountTable } from '@/app/manage/accounts/_components'
+import { AccountTable } from '@/app/[locale]/manage/accounts/_components'
 
 export default function AccountPage() {
   return (

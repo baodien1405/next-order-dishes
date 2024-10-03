@@ -1,9 +1,9 @@
-import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 import { path } from '@/constants'
 import { checkAndRefreshToken } from '@/lib/utils'
 import { useAppStore } from '@/hooks'
+import { usePathname, useRouter } from '@/i18n/routing'
 
 const UNAUTHENTICATED_PATH_LIST: string[] = [path.LOGIN, path.LOGOUT, path.REFRESH_TOKEN]
 

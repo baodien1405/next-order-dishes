@@ -1,4 +1,4 @@
-import { ChangePasswordForm, UpdateProfileForm } from '@/app/manage/setting/_components'
+import { ChangePasswordForm, UpdateProfileForm } from '@/app/[locale]/manage/setting/_components'
 import { Badge } from '@/components/ui/badge'
 
 export default function SettingPage() {
