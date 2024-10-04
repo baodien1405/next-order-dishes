@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { DishTable } from '@/app/[locale]/manage/dishes/_components'
 
@@ -13,9 +11,7 @@ export default function DishesPage() {
             <CardDescription>Quản lý món ăn</CardDescription>
           </CardHeader>
           <CardContent>
-            <Suspense>
-              <DishTable />
-            </Suspense>
+            <DishTable />
           </CardContent>
         </Card>
       </div>

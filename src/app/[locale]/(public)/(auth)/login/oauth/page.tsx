@@ -1,7 +1,6 @@
 'use client'
 
 import { jwtDecode } from 'jwt-decode'
-import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
 import { TokenPayload } from '@/types'
@@ -10,6 +9,7 @@ import { path } from '@/constants'
 import { useToast } from '@/components/ui/use-toast'
 import { useAppStore, useSetTokenToCookieMutation } from '@/hooks'
 import { useRouter } from '@/i18n/routing'
+import { useSearchParamsLoader } from '@/components/search-params-loader'
 
 export default function OAuthPage() {
   const router = useRouter()
@@ -18,10 +18,10 @@ export default function OAuthPage() {
   const setRole = useAppStore((state) => state.setRole)
   const setSocket = useAppStore((state) => state.setSocket)
   const countRef = useRef(0)
-  const searchParams = useSearchParams()
-  const accessToken = searchParams.get('accessToken')
-  const refreshToken = searchParams.get('refreshToken')
-  const message = searchParams.get('message')
+  const { searchParams } = useSearchParamsLoader()
+  const accessToken = searchParams?.get('accessToken')
+  const refreshToken = searchParams?.get('refreshToken')
+  const message = searchParams?.get('message')
 
   useEffect(() => {
     if (accessToken && refreshToken) {

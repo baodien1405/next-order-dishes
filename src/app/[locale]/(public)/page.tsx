@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/routing'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 
 import { path } from '@/constants'
 import { dishService } from '@/services'
 import { formatCurrency, wrapServerApi } from '@/lib/utils'
 
-export default async function Home() {
+export default async function Home({ params: { locale } }: { params: { locale: string } }) {
+  unstable_setRequestLocale(locale)
   const t = await getTranslations('HomePage')
   const response = await wrapServerApi(() => dishService.getAll())
   const dishList = response?.payload?.data || []

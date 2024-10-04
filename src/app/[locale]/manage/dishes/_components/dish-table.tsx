@@ -2,7 +2,6 @@
 
 import DOMPurify from 'dompurify'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {
   ColumnDef,
@@ -46,6 +45,7 @@ import { useDeleteDishMutation, useDishListQuery } from '@/hooks'
 import { useToast } from '@/components/ui/use-toast'
 import { EditDish } from '@/app/[locale]/manage/dishes/_components/edit-dish'
 import { AddDish } from '@/app/[locale]/manage/dishes/_components/add-dish'
+import { useSearchParamsLoader } from '@/components/search-params-loader'
 
 type DishItem = DishListResType['data'][0]
 
@@ -189,8 +189,8 @@ function AlertDialogDeleteDish({
 // Số lượng item trên 1 trang
 const PAGE_SIZE = 10
 export function DishTable() {
-  const searchParam = useSearchParams()
-  const page = searchParam.get('page') ? Number(searchParam.get('page')) : 1
+  const { searchParams } = useSearchParamsLoader()
+  const page = searchParams?.get('page') ? Number(searchParams?.get('page')) : 1
   const pageIndex = page - 1
   const [dishIdEdit, setDishIdEdit] = useState<number | undefined>()
   const [dishDelete, setDishDelete] = useState<DishItem | null>(null)

@@ -2,6 +2,12 @@
   "HomePage": {
     "title": "Nhà hàng Big Boy"
   },
+  "LoginPage": {
+    "title": "Đăng nhập"
+  },
+  "LogoutPage": {
+    "title": "Đăng xuất..."
+  },
   "SwitchLanguage": {
     "title": "Chuyển ngôn ngữ",
     "en": "Tiếng Anh",

@@ -1,7 +1,6 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {
   ColumnDef,
@@ -46,6 +45,7 @@ import QRCodeTable from '@/components/qrcode-table'
 import { useToast } from '@/components/ui/use-toast'
 import { EditTable } from '@/app/[locale]/manage/tables/_components/edit-table'
 import { AddTable } from '@/app/[locale]/manage/tables/_components/add-table'
+import { useSearchParamsLoader } from '@/components/search-params-loader'
 
 type TableItem = TableListResType['data'][0]
 
@@ -169,8 +169,8 @@ function AlertDialogDeleteTable({
 // Số lượng item trên 1 trang
 const PAGE_SIZE = 10
 export function TableTable() {
-  const searchParam = useSearchParams()
-  const page = searchParam.get('page') ? Number(searchParam.get('page')) : 1
+  const { searchParams } = useSearchParamsLoader()
+  const page = searchParams?.get('page') ? Number(searchParams?.get('page')) : 1
   const pageIndex = page - 1
   // const params = Object.fromEntries(searchParam.entries())
   const [tableIdEdit, setTableIdEdit] = useState<number | undefined>()

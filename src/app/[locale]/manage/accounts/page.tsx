@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AccountTable } from '@/app/[locale]/manage/accounts/_components'
 
@@ -13,9 +11,7 @@ export default function AccountPage() {
             <CardDescription>Quản lý tài khoản nhân viên</CardDescription>
           </CardHeader>
           <CardContent>
-            <Suspense>
-              <AccountTable />
-            </Suspense>
+            <AccountTable />
           </CardContent>
         </Card>
       </div>

@@ -3,7 +3,6 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useSearchParams } from 'next/navigation'
 import { Link, useRouter } from '@/i18n/routing'
 
 import { Button } from '@/components/ui/button'
@@ -16,6 +15,8 @@ import { useAppStore, useLoginMutation } from '@/hooks'
 import { generateSocketInstance, handleErrorApi } from '@/lib/utils'
 import { path } from '@/constants'
 import { envConfig } from '@/configs'
+import { useTranslations } from 'next-intl'
+import { SearchParamsLoader, useSearchParamsLoader } from '@/components/search-params-loader'
 
 const getOauthGoogleUrl = () => {
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
@@ -36,9 +37,10 @@ const getOauthGoogleUrl = () => {
 const googleOauthUrl = getOauthGoogleUrl()
 
 export function LoginForm() {
+  const t = useTranslations('LoginPage')
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const clearTokens = searchParams.get('clearTokens')
+  const { searchParams, setSearchParams } = useSearchParamsLoader()
+  const clearTokens = searchParams?.get('clearTokens')
   const setSocket = useAppStore((state) => state.setSocket)
   const setRole = useAppStore((state) => state.setRole)
   const loginMutation = useLoginMutation()
@@ -74,8 +76,9 @@ export function LoginForm() {
 
   return (
     <Card className="mx-auto max-w-sm">
+      <SearchParamsLoader onParamsReceived={setSearchParams} />
       <CardHeader>
-        <CardTitle className="text-2xl">Đăng nhập</CardTitle>
+        <CardTitle className="text-2xl">{t('title')}</CardTitle>
         <CardDescription>Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống</CardDescription>
       </CardHeader>
       <CardContent>

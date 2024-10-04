@@ -1,7 +1,6 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 import { CaretSortIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {
   ColumnDef,
@@ -47,6 +46,7 @@ import { handleErrorApi } from '@/lib/utils'
 import { useToast } from '@/components/ui/use-toast'
 import { EditEmployee } from '@/app/[locale]/manage/accounts/_components/edit-employee'
 import { AddEmployee } from '@/app/[locale]/manage/accounts/_components/add-employee'
+import { useSearchParamsLoader } from '@/components/search-params-loader'
 
 type AccountItem = AccountListResType['data'][0]
 
@@ -179,8 +179,8 @@ function AlertDialogDeleteAccount({
 // Số lượng item trên 1 trang
 const PAGE_SIZE = 10
 export function AccountTable() {
-  const searchParam = useSearchParams()
-  const page = searchParam.get('page') ? Number(searchParam.get('page')) : 1
+  const { searchParams } = useSearchParamsLoader()
+  const page = searchParams?.get('page') ? Number(searchParams?.get('page')) : 1
   const pageIndex = page - 1
   // const params = Object.fromEntries(searchParam.entries())
   const [employeeIdEdit, setEmployeeIdEdit] = useState<number | undefined>()

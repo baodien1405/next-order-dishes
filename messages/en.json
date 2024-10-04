@@ -2,6 +2,12 @@
   "HomePage": {
     "title": "Big Boy Restaurant"
   },
+  "LoginPage": {
+    "title": "Login"
+  },
+  "LogoutPage": {
+    "title": "Logout..."
+  },
   "SwitchLanguage": {
     "title": "Switch language",
     "en": "English",

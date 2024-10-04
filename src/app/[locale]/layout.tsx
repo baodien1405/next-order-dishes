@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
+import { getMessages, unstable_setRequestLocale } from 'next-intl/server'
 
 import { cn } from '@/lib/utils'
 import { AppProvider, ThemeProvider } from '@/providers'
 import { Toaster } from '@/components/ui/toaster'
+import { routing } from '@/i18n/routing'
 
 import './globals.css'
 
@@ -19,6 +20,10 @@ export const metadata: Metadata = {
   description: 'The best restaurant in the world'
 }
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }))
+}
+
 export default async function RootLayout({
   children,
   params: { locale }
@@ -26,6 +31,7 @@ export default async function RootLayout({
   children: React.ReactNode
   params: { locale: string }
 }>) {
+  unstable_setRequestLocale(locale)
   const messages = await getMessages()
 
   return (

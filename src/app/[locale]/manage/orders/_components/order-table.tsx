@@ -12,7 +12,6 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import { Check, ChevronsUpDown } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
 import { createContext, useEffect, useState } from 'react'
 import { endOfDay, format, startOfDay } from 'date-fns'
 
@@ -35,6 +34,7 @@ import { EditOrder } from '@/app/[locale]/manage/orders/_components/edit-order'
 import { AddOrder } from '@/app/[locale]/manage/orders/_components/add-order'
 import { OrderStatics } from '@/app/[locale]/manage/orders/_components/order-statics'
 import { TableSkeleton } from '@/app/[locale]/manage/orders/_components/table-skeleton'
+import { useSearchParamsLoader } from '@/components/search-params-loader'
 
 export const OrderTableContext = createContext({
   setOrderIdEdit: (value: number | undefined) => {},
@@ -63,11 +63,11 @@ const initToDate = endOfDay(new Date())
 export function OrderTable() {
   const toast = useToast()
   const socket = useAppStore((state) => state.socket)
-  const searchParam = useSearchParams()
+  const { searchParams } = useSearchParamsLoader()
   const [openStatusFilter, setOpenStatusFilter] = useState(false)
   const [fromDate, setFromDate] = useState(initFromDate)
   const [toDate, setToDate] = useState(initToDate)
-  const page = searchParam.get('page') ? Number(searchParam.get('page')) : 1
+  const page = searchParams?.get('page') ? Number(searchParams?.get('page')) : 1
   const pageIndex = page - 1
   const [orderIdEdit, setOrderIdEdit] = useState<number | undefined>()
 
