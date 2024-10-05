@@ -1,6 +1,7 @@
 {
   "HomePage": {
-    "title": "Nhà hàng Big Boy"
+    "title": "Nhà hàng Big Boy",
+    "description": "Nhà hàng tốt nhất thế giới"
   },
   "LoginPage": {
     "title": "Đăng nhập"

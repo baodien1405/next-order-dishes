@@ -1,6 +1,7 @@
 {
   "HomePage": {
-    "title": "Big Boy Restaurant"
+    "title": "Big Boy Restaurant",
+    "description": "The best restaurant in the world"
   },
   "LoginPage": {
     "title": "Login"
