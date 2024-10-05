@@ -80,7 +80,7 @@ export function LoginForm() {
       <SearchParamsLoader onParamsReceived={setSearchParams} />
       <CardHeader>
         <CardTitle className="text-2xl">{t('title')}</CardTitle>
-        <CardDescription>Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống</CardDescription>
+        <CardDescription>{t('card_description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -119,12 +119,12 @@ export function LoginForm() {
                 )}
               />
               <Button type="submit" className="w-full">
-                Đăng nhập
+                {t('button_login')}
               </Button>
 
               <Link href={googleOauthUrl}>
                 <Button variant="outline" className="w-full" type="button">
-                  Đăng nhập bằng Google
+                  {t('login_with_google')}
                 </Button>
               </Link>
             </div>

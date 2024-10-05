@@ -1,10 +1,23 @@
 {
-  "HomePage": {
+  "Brand": {
     "title": "Nhà hàng Big Boy",
-    "description": "Nhà hàng tốt nhất thế giới"
+    "defaultTitle": "Big Boy"
+  },
+  "HomePage": {
+    "title": "Trang chủ",
+    "description": "Khát khao một trải nghiệm ẩm thực Mỹ cổ điển? Big Boy là lựa chọn hoàn hảo! Thưởng thức chiếc Big Boy burger biểu tượng, thơm ngon và đậm đà, cùng với những ly milkshake béo ngậy và khoai tây chiên giòn tan. Hoàn hảo cho các buổi gặp mặt gia đình và bạn bè!",
+    "slogan": "Vị ngon, trọn khoảnh khắc",
+    "h2": "Đa dạng các món ăn"
   },
   "LoginPage": {
-    "title": "Đăng nhập"
+    "title": "Đăng nhập",
+    "description": "Khu vực đăng nhập quản lý",
+    "card_description": "Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống",
+    "button_login": "Đăng nhập",
+    "login_with_google": "Đăng nhập với Google"
+  },
+  "DishDetail": {
+    "not_found": "Món ăn không tồn tại"
   },
   "LogoutPage": {
     "title": "Đăng xuất..."
@@ -16,8 +29,63 @@
   },
   "ErrorMessage": {
     "invalid_email": "Email không hợp lệ",
-    "min_password": "Mật khẩu ít nhất phải có 6 kí tự",
-    "max_password": "Mật khẩu tối đa không vượt quá 100 kí tự",
+    "min_max_password": "Mật khẩu phải từ 6 đến 100 ký tự",
     "required": "Trường này thì bắt buộc"
+  },
+  "LoginGuest": {
+    "title": "Đăng nhập để gọi món",
+    "description": "Nhập thông tin đăng nhập để thực hiện gọi món"
+  },
+  "GuestMenu": {
+    "title": "Thực đơn",
+    "description": "Chọn món ăn yêu thích của bạn"
+  },
+  "ManageAccounts": {
+    "title": "Quản lý tài khoản",
+    "description": "Quản lý tài khoản nhân viên",
+    "card_title": "Tài khoản",
+    "card_description": "Quản lý tài khoản nhân viên"
+  },
+  "Dashboard": {
+    "title": "Bảng điều khiển",
+    "description": "Xem và phân tích dữ liệu bán hàng",
+    "card_title": "Bảng điều khiển",
+    "card_description": "Phân tích các chỉ số"
+  },
+  "Dishes": {
+    "title": "Món ăn",
+    "description": "Quản lý món ăn",
+    "card_title": "Món ăn",
+    "card_description": "Quản lý món ăn"
+  },
+  "Orders": {
+    "title": "Đơn hàng",
+    "description": "Quản lý đơn hàng",
+    "card_title": "Đơn hàng",
+    "card_description": "Quản lý đơn hàng"
+  },
+  "Setting": {
+    "title": "Cài đặt",
+    "description": "Quản lý cài đặt tài khoản của bạn",
+    "setting": "Cài đặt"
+  },
+  "Tables": {
+    "title": "Bàn ăn",
+    "description": "Quản lý bàn ăn",
+    "card_title": "Bàn ăn",
+    "card_description": "Quản lý bàn ăn"
+  },
+  "NavItem": {
+    "home": "Trang chủ",
+    "menu": "Thực đơn",
+    "orders": "Đơn hàng",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "manage": "Quản lý",
+    "logout_dialog": {
+      "logout_question": "Bạn có chắc chắn muốn đăng xuất?",
+      "logout_cancel": "Hủy",
+      "logout_confirm": "Đăng xuất có thể dẫn đến mất dữ liệu đơn hàng của bạn"
+    }
   }
 }

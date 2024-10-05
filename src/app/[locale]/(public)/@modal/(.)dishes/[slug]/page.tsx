@@ -1,10 +1,10 @@
 import { Modal } from '@/app/[locale]/(public)/@modal/(.)dishes/[slug]/_components'
 import { DishDetail } from '@/app/[locale]/(public)/dishes/[slug]/_components'
-import { getSlugIdFromSlugUrl, wrapServerApi } from '@/lib/utils'
+import { getIdFromSlugUrl, wrapServerApi } from '@/lib/utils'
 import { dishService } from '@/services'
 
 export default async function DishDetailPage({ params }: { params: { slug: string } }) {
-  const slugId = getSlugIdFromSlugUrl(params.slug)
+  const slugId = getIdFromSlugUrl(params.slug)
   const data = await wrapServerApi(() => dishService.get(slugId))
   const dish = data?.payload?.data
 

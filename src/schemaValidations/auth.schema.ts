@@ -10,9 +10,9 @@ export const LoginBody = z
     password: z
       .string()
       .min(6, {
-        message: 'min_password'
+        message: 'min_max_password'
       })
-      .max(100, { message: 'max_password' })
+      .max(100, { message: 'min_max_password' })
   })
   .strict()
 

@@ -201,6 +201,6 @@ export const generateSlugUrl = ({ name, id }: { name: string; id: number }) => {
   return slugify(`${name}-i.${id}`)
 }
 
-export const getSlugIdFromSlugUrl = (slugUrl: string) => {
+export const getIdFromSlugUrl = (slugUrl: string) => {
   return Number(slugUrl.split('-i.')[1])
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { Link, useRouter } from '@/i18n/routing'
+import { useTranslations } from 'next-intl'
 
 import {
   AlertDialog,
@@ -28,32 +29,33 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   {
-    title: 'Trang chủ',
+    title: 'home',
     href: path.HOME
   },
   {
-    title: 'Menu',
+    title: 'menu',
     href: path.GUEST_MENU,
     role: [Role.Guest]
   },
   {
-    title: 'Đăng nhập',
+    title: 'login',
     href: path.LOGIN,
     hideWhenLogin: true
   },
   {
-    title: 'Đơn hàng',
+    title: 'orders',
     href: path.GUEST_ORDERS,
     role: [Role.Guest]
   },
   {
-    title: 'Quản lý',
+    title: 'manage',
     href: path.MANAGE_DASHBOARD,
     role: [Role.Owner, Role.Employee]
   }
 ]
 
 export default function NavItems({ className }: { className?: string }) {
+  const t = useTranslations('NavItem')
   const router = useRouter()
   const setRole = useAppStore((state) => state.setRole)
   const role = useAppStore((state) => state.role)
@@ -80,7 +82,7 @@ export default function NavItems({ className }: { className?: string }) {
         if (isAuth || canShow) {
           return (
             <Link href={item.href} key={item.href} className={className}>
-              {item.title}
+              {t(item.title as any)}
             </Link>
           )
         }
@@ -91,17 +93,17 @@ export default function NavItems({ className }: { className?: string }) {
       {role && (
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <div className={cn(className, 'cursor-pointer')}>Đăng xuất</div>
+            <div className={cn(className, 'cursor-pointer')}>{t('logout')}</div>
           </AlertDialogTrigger>
 
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Bạn có muốn đăng xuất không?</AlertDialogTitle>
-              <AlertDialogDescription>Việc đăng xuất có thể làm mất hoá đơn của bạn</AlertDialogDescription>
+              <AlertDialogTitle>{t('logout_dialog.logout_question')}</AlertDialogTitle>
+              <AlertDialogDescription>{t('logout_dialog.logout_confirm')}</AlertDialogDescription>
             </AlertDialogHeader>
 
             <AlertDialogFooter>
-              <AlertDialogCancel>Thoát</AlertDialogCancel>
+              <AlertDialogCancel>{t('logout_dialog.logout_cancel')}</AlertDialogCancel>
               <AlertDialogAction onClick={handleLogout}>OK</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

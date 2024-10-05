@@ -19,6 +19,7 @@ export async function DishDetail({ dish }: { dish?: DishResType['data'] }) {
         quality={100}
         alt={dish.name}
         className="w-full h-full object-cover rounded-md max-w-[1080px] max-h-[1080px]"
+        title={dish.name}
       />
       <div>{dish.description}</div>
     </div>

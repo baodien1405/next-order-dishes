@@ -16,11 +16,13 @@ const fontSans = FontSans({
 })
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  const t = await getTranslations({ locale, namespace: 'HomePage' })
+  const t = await getTranslations({ locale, namespace: 'Brand' })
 
   return {
-    title: t('title'),
-    description: t('description')
+    title: {
+      template: `%s | ${t('title')}`,
+      default: t('defaultTitle')
+    }
   }
 }
 
