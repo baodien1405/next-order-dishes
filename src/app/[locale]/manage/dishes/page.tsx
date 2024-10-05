@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { DishTable } from '@/app/[locale]/manage/dishes/_components'
@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function DishesPage() {
+export default async function DishesPage({ params: { locale } }: { params: { locale: string } }) {
+  unstable_setRequestLocale(locale)
   const t = await getTranslations('Dishes')
 
   return (

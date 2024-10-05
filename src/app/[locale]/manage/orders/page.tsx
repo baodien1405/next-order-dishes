@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { OrderTable } from '@/app/[locale]/manage/orders/_components'
@@ -29,7 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function OrdersPage() {
+export default async function OrdersPage({ params: { locale } }: { params: { locale: string } }) {
+  unstable_setRequestLocale(locale)
   const t = await getTranslations('Orders')
 
   return (

@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 
 import { ChangePasswordForm, UpdateProfileForm } from '@/app/[locale]/manage/setting/_components'
 import { Badge } from '@/components/ui/badge'
@@ -30,7 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function SettingPage() {
+export default async function SettingPage({ params: { locale } }: { params: { locale: string } }) {
+  unstable_setRequestLocale(locale)
   const t = await getTranslations('Setting')
 
   return (
