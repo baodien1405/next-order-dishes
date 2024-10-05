@@ -4,7 +4,7 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 
 import { path } from '@/constants'
 import { dishService } from '@/services'
-import { formatCurrency, wrapServerApi } from '@/lib/utils'
+import { formatCurrency, generateSlugUrl, wrapServerApi } from '@/lib/utils'
 
 export default async function Home({ params: { locale } }: { params: { locale: string } }) {
   unstable_setRequestLocale(locale)
@@ -34,7 +34,13 @@ export default async function Home({ params: { locale } }: { params: { locale: s
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {dishList.map((dish) => (
             <div className="flex gap-4 w" key={dish.id}>
-              <Link href={`${path.DISHES}/${dish.id}`} className="flex-shrink-0">
+              <Link
+                href={`${path.DISHES}/${generateSlugUrl({
+                  name: dish.name,
+                  id: dish.id
+                })}`}
+                className="flex-shrink-0"
+              >
                 <Image
                   src={dish.image}
                   width={150}

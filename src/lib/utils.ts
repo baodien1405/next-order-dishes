@@ -5,6 +5,7 @@ import { twMerge } from 'tailwind-merge'
 import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns'
 import { BookX, CookingPot, HandCoins, Loader, Truck } from 'lucide-react'
+import slugify from 'slugify'
 
 import { EntityError } from '@/lib/http'
 import { toast } from '@/components/ui/use-toast'
@@ -195,4 +196,11 @@ export const wrapServerApi = async <T>(fn: () => Promise<T>) => {
   }
 
   return result
+}
+export const generateSlugUrl = ({ name, id }: { name: string; id: number }) => {
+  return slugify(`${name}-i.${id}`)
+}
+
+export const getSlugIdFromSlugUrl = (slugUrl: string) => {
+  return Number(slugUrl.split('-i.')[1])
 }
