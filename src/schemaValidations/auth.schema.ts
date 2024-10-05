@@ -4,8 +4,15 @@ import { Role } from '@/constants'
 
 export const LoginBody = z
   .object({
-    email: z.string().email(),
-    password: z.string().min(6).max(100)
+    email: z.string().min(1, { message: 'required' }).email({
+      message: 'invalid_email'
+    }),
+    password: z
+      .string()
+      .min(6, {
+        message: 'min_password'
+      })
+      .max(100, { message: 'max_password' })
   })
   .strict()
 

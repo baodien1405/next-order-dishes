@@ -12,5 +12,11 @@
     "title": "Chuyển ngôn ngữ",
     "en": "Tiếng Anh",
     "vi": "Tiếng Việt"
+  },
+  "ErrorMessage": {
+    "invalid_email": "Email không hợp lệ",
+    "min_password": "Mật khẩu ít nhất phải có 6 kí tự",
+    "max_password": "Mật khẩu tối đa không vượt quá 100 kí tự",
+    "required": "Trường này thì bắt buộc"
   }
 }

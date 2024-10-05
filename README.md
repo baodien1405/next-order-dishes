@@ -1,5 +1,17 @@
 # Project Order Dishes Management
 
+## Warning
+
+- i18n with routing
+
+  - next-intl not working with generateStaticParams
+  - next-intl not working with intercepting and parallel route
+  - link issue: https://github.com/amannn/next-intl/issues/255
+
+- i18n without routing
+
+  - convert page (server components) to dynamic rendering
+
 ## Main feature of the project
 
 - Authentication module: Manage by JWT

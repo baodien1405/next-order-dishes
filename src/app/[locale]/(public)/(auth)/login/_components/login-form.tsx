@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useRouter } from '@/i18n/routing'
+import { useTranslations } from 'next-intl'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,7 +16,6 @@ import { useAppStore, useLoginMutation } from '@/hooks'
 import { generateSocketInstance, handleErrorApi } from '@/lib/utils'
 import { path } from '@/constants'
 import { envConfig } from '@/configs'
-import { useTranslations } from 'next-intl'
 import { SearchParamsLoader, useSearchParamsLoader } from '@/components/search-params-loader'
 
 const getOauthGoogleUrl = () => {
@@ -38,6 +38,7 @@ const googleOauthUrl = getOauthGoogleUrl()
 
 export function LoginForm() {
   const t = useTranslations('LoginPage')
+  const errorMessageT = useTranslations('ErrorMessage')
   const router = useRouter()
   const { searchParams, setSearchParams } = useSearchParamsLoader()
   const clearTokens = searchParams?.get('clearTokens')
@@ -92,12 +93,12 @@ export function LoginForm() {
               <FormField
                 control={form.control}
                 name="email"
-                render={({ field }) => (
+                render={({ field, fieldState: { error } }) => (
                   <FormItem>
                     <div className="grid gap-2">
                       <Label htmlFor="email">Email</Label>
                       <Input id="email" type="email" placeholder="m@example.com" required {...field} />
-                      <FormMessage />
+                      <FormMessage>{Boolean(error?.message) && errorMessageT(error?.message as any)}</FormMessage>
                     </div>
                   </FormItem>
                 )}
@@ -105,14 +106,14 @@ export function LoginForm() {
               <FormField
                 control={form.control}
                 name="password"
-                render={({ field }) => (
+                render={({ field, fieldState: { error } }) => (
                   <FormItem>
                     <div className="grid gap-2">
                       <div className="flex items-center">
                         <Label htmlFor="password">Password</Label>
                       </div>
                       <Input id="password" type="password" required {...field} />
-                      <FormMessage />
+                      <FormMessage>{Boolean(error?.message) && errorMessageT(error?.message as any)}</FormMessage>
                     </div>
                   </FormItem>
                 )}

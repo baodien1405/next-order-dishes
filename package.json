@@ -1,6 +1,6 @@
 {
   "name": "next-order-dishes",
-  "version": "0.20.10",
+  "version": "0.20.11",
   "private": true,
   "scripts": {
     "dev": "next dev",
