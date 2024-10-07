@@ -32,6 +32,7 @@ export default async function Home({ params: { locale } }: { params: { locale: s
           quality={100}
           alt="Banner"
           className="absolute top-0 left-0 w-full h-full object-cover"
+          title="banner"
         />
         <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20">
           <h1 className="text-center text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold">{t('title')}</h1>
@@ -56,6 +57,7 @@ export default async function Home({ params: { locale } }: { params: { locale: s
                   height={150}
                   alt={dish.name}
                   className="object-cover w-[150px] h-[150px] rounded-md"
+                  title={dish.name}
                 />
               </Link>
               <div className="space-y-1">
