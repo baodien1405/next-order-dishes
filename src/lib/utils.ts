@@ -21,6 +21,7 @@ import { authService, guestService } from '@/services'
 import { DishStatus, OrderStatus, Role, TableStatus } from '@/constants'
 import { envConfig } from '@/configs'
 import { TokenPayload } from '@/types'
+import { convert } from 'html-to-text'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -203,4 +204,12 @@ export const generateSlugUrl = ({ name, id }: { name: string; id: number }) => {
 
 export const getIdFromSlugUrl = (slugUrl: string) => {
   return Number(slugUrl.split('-i.')[1])
+}
+
+export const convertHtmlToText = (html: string) => {
+  return convert(html, {
+    limits: {
+      maxInputLength: 140
+    }
+  })
 }

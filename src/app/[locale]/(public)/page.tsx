@@ -4,14 +4,14 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 
 import { path } from '@/constants'
 import { dishService } from '@/services'
-import { formatCurrency, generateSlugUrl, wrapServerApi } from '@/lib/utils'
+import { convertHtmlToText, formatCurrency, generateSlugUrl, wrapServerApi } from '@/lib/utils'
 import { Locale } from '@/i18n/config'
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   const t = await getTranslations({ locale, namespace: 'HomePage' })
   return {
     title: t('title'),
-    description: t('description')
+    description: convertHtmlToText(t('description'))
   }
 }
 
