@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { AppProvider, ThemeProvider } from '@/providers'
 import { Toaster } from '@/components/ui/toaster'
 import { routing } from '@/i18n/routing'
+import Footer from '@/components/footer'
 
 import './globals.css'
 
@@ -52,6 +53,7 @@ export default async function RootLayout({
           <AppProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               {children}
+              <Footer />
               <Toaster />
             </ThemeProvider>
           </AppProvider>
