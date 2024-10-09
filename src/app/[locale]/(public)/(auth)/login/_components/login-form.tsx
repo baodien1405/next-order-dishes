@@ -17,6 +17,7 @@ import { generateSocketInstance, handleErrorApi } from '@/lib/utils'
 import { path } from '@/constants'
 import { envConfig } from '@/configs'
 import { SearchParamsLoader, useSearchParamsLoader } from '@/components/search-params-loader'
+import { Loader2 } from 'lucide-react'
 
 const getOauthGoogleUrl = () => {
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
@@ -119,6 +120,7 @@ export function LoginForm() {
                 )}
               />
               <Button type="submit" className="w-full">
+                {loginMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {t('button_login')}
               </Button>
 

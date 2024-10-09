@@ -2,6 +2,7 @@ import { Inter as FontSans } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
+import NextTopLoader from 'nextjs-toploader'
 
 import { cn } from '@/lib/utils'
 import { AppProvider, ThemeProvider } from '@/providers'
@@ -46,6 +47,7 @@ export default async function RootLayout({
         suppressHydrationWarning
         className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}
       >
+        <NextTopLoader showSpinner={false} color="hsl(var(--foreground))" />
         <NextIntlClientProvider messages={messages}>
           <AppProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
