@@ -9,6 +9,7 @@ import { AppProvider, ThemeProvider } from '@/providers'
 import { Toaster } from '@/components/ui/toaster'
 import { routing } from '@/i18n/routing'
 import Footer from '@/components/footer'
+import { BASE_OPEN_GRAPH } from '@/shared-metadata'
 
 import './globals.css'
 
@@ -24,6 +25,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     title: {
       template: `%s | ${t('title')}`,
       default: t('defaultTitle')
+    },
+    openGraph: {
+      ...BASE_OPEN_GRAPH
     }
   }
 }
