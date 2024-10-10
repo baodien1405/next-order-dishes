@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie'
+
 import { envConfig } from '@/configs'
 import { normalizePath } from '@/lib/utils'
 import { LoginResType } from '@/schemaValidations/auth.schema'
@@ -108,6 +110,8 @@ const request = async <Response>(
     } else if (res.status === AUTHENTICATION_ERROR_STATUS) {
       // Handle auto logout from next client
       if (isClient) {
+        const locale = Cookies.get('NEXT_LOCALE')
+
         if (!clientLogoutRequest) {
           clientLogoutRequest = fetch('/api/auth/logout', {
             method: 'POST',
@@ -122,7 +126,7 @@ const request = async <Response>(
             removeAccessTokenToLS()
             removeRefreshTokenToLS()
             clientLogoutRequest = null
-            location.href = path.LOGIN
+            location.href = `/${locale}/${path.LOGIN}`
           }
         }
       } else {

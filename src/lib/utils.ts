@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns'
 import { BookX, CookingPot, HandCoins, Loader, Truck } from 'lucide-react'
 import slugify from 'slugify'
+import { convert } from 'html-to-text'
 
 import { EntityError } from '@/lib/http'
 import { toast } from '@/components/ui/use-toast'
@@ -21,7 +22,6 @@ import { authService, guestService } from '@/services'
 import { DishStatus, OrderStatus, Role, TableStatus } from '@/constants'
 import { envConfig } from '@/configs'
 import { TokenPayload } from '@/types'
-import { convert } from 'html-to-text'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

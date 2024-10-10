@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useRouter } from '@/i18n/routing'
 import { useTranslations } from 'next-intl'
+import { Loader2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,7 +18,6 @@ import { generateSocketInstance, handleErrorApi } from '@/lib/utils'
 import { path } from '@/constants'
 import { envConfig } from '@/configs'
 import { SearchParamsLoader, useSearchParamsLoader } from '@/components/search-params-loader'
-import { Loader2 } from 'lucide-react'
 
 const getOauthGoogleUrl = () => {
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
