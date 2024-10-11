@@ -1,5 +1,17 @@
 # Project Order Dishes Management
 
+## Analyzing your bundles
+
+- Run the following command to analyze your bundles:
+
+```js
+ANALYZE=true npm run build
+# or
+ANALYZE=true yarn build
+# or
+ANALYZE=true pnpm build
+```
+
 ## Warning
 
 - i18n with routing
