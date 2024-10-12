@@ -22,7 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { CreateEmployeeAccountBody, CreateEmployeeAccountBodyType } from '@/schemaValidations/account.schema'
 import { useAddAccountMutation, useUploadMediaMutation } from '@/hooks'
 import { useToast } from '@/components/ui/use-toast'
-import { handleErrorApi } from '@/lib/utils'
+import { handleErrorApi } from '@/lib/client-utils'
 
 export function AddEmployee() {
   const [file, setFile] = useState<File | null>(null)

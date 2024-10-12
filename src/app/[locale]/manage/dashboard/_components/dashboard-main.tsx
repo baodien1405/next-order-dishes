@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useDashboardIndicatorsQuery } from '@/hooks/queries'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency } from '@/lib/client-utils'
 import { RevenueLineChart } from '@/app/[locale]/manage/dashboard/_components/revenue-line-chart'
 import { DishBarChart } from '@/app/[locale]/manage/dashboard/_components/dish-bar-chart'
 

@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
-import { getVietnameseTableStatus, handleErrorApi } from '@/lib/utils'
+import { getVietnameseTableStatus, handleErrorApi } from '@/lib/client-utils'
 import { CreateTableBody, CreateTableBodyType } from '@/schemaValidations/table.schema'
 import { TableStatus, TableStatusValues } from '@/constants/type'
 import { useAddTableMutation } from '@/hooks'

@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { usePathname, useRouter } from '@/i18n/routing'
 import { path } from '@/constants'
 import { useAppStore, useLogoutMutation } from '@/hooks'
-import { handleErrorApi } from '@/lib/utils'
+import { handleErrorApi } from '@/lib/client-utils'
 
 const UNAUTHENTICATED_PATH_LIST: string[] = [path.LOGIN, path.LOGOUT, path.REFRESH_TOKEN]
 

@@ -10,7 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/client-utils'
 
 interface Props {
   page: number

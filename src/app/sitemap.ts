@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 
 import { envConfig } from '@/configs'
 import { locales } from '@/i18n/config'
-import { generateSlugUrl } from '@/lib/utils'
+import { generateSlugUrl } from '@/lib/client-utils'
 import { dishService } from '@/services'
 import { path } from '@/constants'
 

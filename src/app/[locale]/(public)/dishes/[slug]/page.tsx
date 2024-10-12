@@ -5,7 +5,7 @@ import { cache } from 'react'
 import { DishDetail } from '@/app/[locale]/(public)/dishes/[slug]/_components'
 import { envConfig } from '@/configs'
 import { Locale } from '@/i18n/config'
-import { generateSlugUrl, getIdFromSlugUrl, wrapServerApi } from '@/lib/utils'
+import { generateSlugUrl, getIdFromSlugUrl, wrapServerApi } from '@/lib/client-utils'
 import { dishService } from '@/services'
 import { BASE_OPEN_GRAPH } from '@/shared-metadata'
 

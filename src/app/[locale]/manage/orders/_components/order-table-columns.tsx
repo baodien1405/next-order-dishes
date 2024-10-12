@@ -19,7 +19,12 @@ import { Badge } from '@/components/ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 import { GetOrdersResType } from '@/schemaValidations/order.schema'
-import { formatCurrency, formatDateTimeToLocaleString, getVietnameseOrderStatus, simpleMatchText } from '@/lib/utils'
+import {
+  formatCurrency,
+  formatDateTimeToLocaleString,
+  getVietnameseOrderStatus,
+  simpleMatchText
+} from '@/lib/client-utils'
 import { OrderStatus, OrderStatusValues } from '@/constants/type'
 import { OrderTableContext } from '@/app/[locale]/manage/orders/_components/order-table'
 import { OrderGuestDetail } from '@/app/[locale]/manage/orders/_components/order-guest-detail'

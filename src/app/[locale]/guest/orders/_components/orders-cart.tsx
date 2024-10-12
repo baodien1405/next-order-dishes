@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react'
 import Image from 'next/image'
 
 import { useAppStore, useGuestGetOrderListQuery } from '@/hooks'
-import { formatCurrency, getVietnameseOrderStatus } from '@/lib/utils'
+import { formatCurrency, getVietnameseOrderStatus } from '@/lib/client-utils'
 import { Badge } from '@/components/ui/badge'
 import { PayGuestOrdersResType, UpdateOrderResType } from '@/schemaValidations/order.schema'
 import { useToast } from '@/components/ui/use-toast'

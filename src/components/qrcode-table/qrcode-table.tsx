@@ -3,7 +3,7 @@
 import QRCode from 'qrcode'
 import { useEffect, useRef } from 'react'
 
-import { getTableLink } from '@/lib/utils'
+import { getTableLink } from '@/lib/client-utils'
 
 interface QRCodeTableProps {
   tableNumber: number

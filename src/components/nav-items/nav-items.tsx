@@ -17,7 +17,7 @@ import {
 
 import { path, Role } from '@/constants'
 import { RoleType } from '@/types'
-import { cn, handleErrorApi } from '@/lib/utils'
+import { cn, handleErrorApi } from '@/lib/client-utils'
 import { useAppStore, useLogoutMutation } from '@/hooks'
 
 interface MenuItem {

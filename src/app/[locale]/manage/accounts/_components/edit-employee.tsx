@@ -24,7 +24,7 @@ import { useToast } from '@/components/ui/use-toast'
 
 import { UpdateEmployeeAccountBody, UpdateEmployeeAccountBodyType } from '@/schemaValidations/account.schema'
 import { useAccountDetailQuery, useUpdateAccountMutation, useUploadMediaMutation } from '@/hooks'
-import { handleErrorApi } from '@/lib/utils'
+import { handleErrorApi } from '@/lib/client-utils'
 import { Role, RoleValues } from '@/constants'
 
 export function EditEmployee({

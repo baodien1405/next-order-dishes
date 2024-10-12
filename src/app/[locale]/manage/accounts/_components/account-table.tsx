@@ -42,7 +42,7 @@ import {
 import AutoPagination from '@/components/auto-pagination'
 
 import { useAccountListQuery, useDeleteAccountMutation } from '@/hooks'
-import { handleErrorApi } from '@/lib/utils'
+import { handleErrorApi } from '@/lib/client-utils'
 import { useToast } from '@/components/ui/use-toast'
 import { EditEmployee } from '@/app/[locale]/manage/accounts/_components/edit-employee'
 import { AddEmployee } from '@/app/[locale]/manage/accounts/_components/add-employee'

@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react'
 import { useRouter } from '@/i18n/routing'
 import { Button } from '@/components/ui/button'
 import { useDishListQuery, useGuestAddOrderMutation } from '@/hooks'
-import { cn, formatCurrency, handleErrorApi } from '@/lib/utils'
+import { cn, formatCurrency, handleErrorApi } from '@/lib/client-utils'
 
 import { GuestCreateOrdersBodyType } from '@/schemaValidations/guest.schema'
 import { DishStatus, path } from '@/constants'

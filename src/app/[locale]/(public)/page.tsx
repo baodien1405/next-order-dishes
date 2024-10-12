@@ -4,9 +4,10 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 
 import { path } from '@/constants'
 import { dishService } from '@/services'
-import { convertHtmlToText, formatCurrency, generateSlugUrl, wrapServerApi } from '@/lib/utils'
+import { formatCurrency, generateSlugUrl, wrapServerApi } from '@/lib/client-utils'
 import { Locale } from '@/i18n/config'
 import { envConfig } from '@/configs'
+import { convertHtmlToText } from '@/lib/server-utils'
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }) {
   const t = await getTranslations({ locale, namespace: 'HomePage' })

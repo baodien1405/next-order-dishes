@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 
 import { path } from '@/constants'
 import { getRefreshTokenFromLS } from '@/lib/common'
-import { checkAndRefreshToken } from '@/lib/utils'
+import { checkAndRefreshToken } from '@/lib/client-utils'
 import { useRouter } from '@/i18n/routing'
 import { SearchParamsLoader, useSearchParamsLoader } from '@/components/search-params-loader'
 

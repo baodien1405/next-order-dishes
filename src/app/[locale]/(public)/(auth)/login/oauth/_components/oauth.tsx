@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useEffect, useRef } from 'react'
 
 import { TokenPayload } from '@/types'
-import { generateSocketInstance } from '@/lib/utils'
+import { generateSocketInstance } from '@/lib/client-utils'
 import { path } from '@/constants'
 import { useToast } from '@/components/ui/use-toast'
 import { useAppStore, useSetTokenToCookieMutation } from '@/hooks'

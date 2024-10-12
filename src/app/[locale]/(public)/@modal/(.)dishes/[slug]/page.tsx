@@ -1,6 +1,6 @@
 import { Modal } from '@/app/[locale]/(public)/@modal/(.)dishes/[slug]/_components'
 import { DishDetail } from '@/app/[locale]/(public)/dishes/[slug]/_components'
-import { getIdFromSlugUrl, wrapServerApi } from '@/lib/utils'
+import { getIdFromSlugUrl, wrapServerApi } from '@/lib/client-utils'
 import { dishService } from '@/services'
 
 export default async function DishDetailPage({ params }: { params: { slug: string } }) {

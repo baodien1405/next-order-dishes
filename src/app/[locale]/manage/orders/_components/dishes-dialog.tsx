@@ -22,7 +22,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import AutoPagination from '@/components/auto-pagination'
 
 import { DishListResType } from '@/schemaValidations/dish.schema'
-import { formatCurrency, getVietnameseDishStatus, simpleMatchText } from '@/lib/utils'
+import { formatCurrency, getVietnameseDishStatus, simpleMatchText } from '@/lib/client-utils'
 import { useDishListQuery } from '@/hooks'
 
 type DishItem = DishListResType['data'][0]

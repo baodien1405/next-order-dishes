@@ -37,7 +37,7 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 
-import { getVietnameseTableStatus, handleErrorApi } from '@/lib/utils'
+import { getVietnameseTableStatus, handleErrorApi } from '@/lib/client-utils'
 import AutoPagination from '@/components/auto-pagination'
 import { TableListResType } from '@/schemaValidations/table.schema'
 import { useDeleteTableMutation, useTableListQuery } from '@/hooks'

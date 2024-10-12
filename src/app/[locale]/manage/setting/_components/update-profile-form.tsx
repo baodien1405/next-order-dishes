@@ -14,7 +14,7 @@ import { UpdateMeBody, UpdateMeBodyType } from '@/schemaValidations/account.sche
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useAccountMeQuery, useUpdateMeMutation, useUploadMediaMutation } from '@/hooks'
-import { handleErrorApi } from '@/lib/utils'
+import { handleErrorApi } from '@/lib/client-utils'
 
 export function UpdateProfileForm() {
   const toast = useToast()

@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { ChangePasswordBody, ChangePasswordBodyType } from '@/schemaValidations/account.schema'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { useChangePasswordMutation } from '@/hooks'
-import { handleErrorApi } from '@/lib/utils'
+import { handleErrorApi } from '@/lib/client-utils'
 import { useToast } from '@/components/ui/use-toast'
 
 export function ChangePasswordForm() {

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency } from '@/lib/client-utils'
 import { DishResType } from '@/schemaValidations/dish.schema'
 
 export async function DishDetail({ dish }: { dish?: DishResType['data'] }) {

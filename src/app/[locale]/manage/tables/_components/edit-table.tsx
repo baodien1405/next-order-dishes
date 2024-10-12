@@ -20,7 +20,7 @@ import { Switch } from '@/components/ui/switch'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
-import { getTableLink, getVietnameseTableStatus, handleErrorApi } from '@/lib/utils'
+import { getTableLink, getVietnameseTableStatus, handleErrorApi } from '@/lib/client-utils'
 import { UpdateTableBody, UpdateTableBodyType } from '@/schemaValidations/table.schema'
 import { TableStatus, TableStatusValues } from '@/constants/type'
 import { useTableDetailQuery, useUpdateTableMutation } from '@/hooks'

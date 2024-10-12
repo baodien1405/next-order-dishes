@@ -22,7 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
 
-import { getVietnameseDishStatus, handleErrorApi } from '@/lib/utils'
+import { getVietnameseDishStatus, handleErrorApi } from '@/lib/client-utils'
 import { CreateDishBody, CreateDishBodyType } from '@/schemaValidations/dish.schema'
 import { DishStatus, DishStatusValues } from '@/constants/type'
 import { useAddDishMutation, useUploadMediaMutation } from '@/hooks'

@@ -20,7 +20,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import AutoPagination from '@/components/auto-pagination'
 import { Input } from '@/components/ui/input'
-import { formatDateTimeToLocaleString, simpleMatchText } from '@/lib/utils'
+import { formatDateTimeToLocaleString, simpleMatchText } from '@/lib/client-utils'
 import { GetListGuestsResType } from '@/schemaValidations/account.schema'
 import { useGuestListQuery } from '@/hooks'
 

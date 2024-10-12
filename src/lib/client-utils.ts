@@ -6,7 +6,6 @@ import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns'
 import { BookX, CookingPot, HandCoins, Loader, Truck } from 'lucide-react'
 import slugify from 'slugify'
-import { convert } from 'html-to-text'
 
 import { EntityError } from '@/lib/http'
 import { toast } from '@/components/ui/use-toast'
@@ -204,12 +203,4 @@ export const generateSlugUrl = ({ name, id }: { name: string; id: number }) => {
 
 export const getIdFromSlugUrl = (slugUrl: string) => {
   return Number(slugUrl.split('-i.')[1])
-}
-
-export const convertHtmlToText = (html: string) => {
-  return convert(html, {
-    limits: {
-      maxInputLength: 140
-    }
-  })
 }

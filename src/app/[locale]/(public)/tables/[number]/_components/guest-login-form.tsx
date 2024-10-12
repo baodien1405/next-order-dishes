@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { GuestLoginBody, GuestLoginBodyType } from '@/schemaValidations/guest.schema'
 import { path } from '@/constants'
-import { generateSocketInstance, handleErrorApi } from '@/lib/utils'
+import { generateSocketInstance, handleErrorApi } from '@/lib/client-utils'
 import { useAppStore, useGuestLoginMutation } from '@/hooks'
 import { useRouter } from '@/i18n/routing'
 

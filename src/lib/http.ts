@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 
 import { envConfig } from '@/configs'
-import { normalizePath } from '@/lib/utils'
+import { normalizePath } from '@/lib/client-utils'
 import { LoginResType } from '@/schemaValidations/auth.schema'
 import {
   getAccessTokenFromLS,

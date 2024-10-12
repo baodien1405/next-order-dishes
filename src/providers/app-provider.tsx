@@ -9,7 +9,7 @@ import ListenLogoutSocket from '@/components/listen-logout-socket'
 import RefreshToken from '@/components/refresh-token'
 import { useAppStore } from '@/hooks'
 import { getAccessTokenFromLS } from '@/lib/common'
-import { generateSocketInstance } from '@/lib/utils'
+import { generateSocketInstance } from '@/lib/client-utils'
 import { TokenPayload } from '@/types'
 
 const queryClient = new QueryClient({

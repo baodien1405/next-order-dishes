@@ -5,7 +5,7 @@ import { Link, usePathname } from '@/i18n/routing'
 
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/client-utils'
 import { menuItems } from '@/constants'
 import { useAppStore } from '@/hooks'
 

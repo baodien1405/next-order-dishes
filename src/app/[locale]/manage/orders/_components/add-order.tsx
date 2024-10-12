@@ -17,7 +17,7 @@ import { Switch } from '@/components/ui/switch'
 import { CreateOrdersBodyType } from '@/schemaValidations/order.schema'
 import { GuestLoginBody, GuestLoginBodyType } from '@/schemaValidations/guest.schema'
 
-import { cn, formatCurrency, handleErrorApi } from '@/lib/utils'
+import { cn, formatCurrency, handleErrorApi } from '@/lib/client-utils'
 import { DishStatus } from '@/constants/type'
 import { useAddOrderMutation, useCreateGuestMutation, useDishListQuery } from '@/hooks'
 import { useToast } from '@/components/ui/use-toast'

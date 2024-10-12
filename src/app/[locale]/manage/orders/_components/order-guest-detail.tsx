@@ -14,7 +14,7 @@ import {
   formatDateTimeToTimeString,
   getVietnameseOrderStatus,
   handleErrorApi
-} from '@/lib/utils'
+} from '@/lib/client-utils'
 import { GetOrdersResType, PayGuestOrdersResType } from '@/schemaValidations/order.schema'
 import { usePayForGuestOrdersMutation } from '@/hooks'
 

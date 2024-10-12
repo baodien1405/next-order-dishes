@@ -4,7 +4,7 @@ import { getMessages, unstable_setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import NextTopLoader from 'nextjs-toploader'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/client-utils'
 import { AppProvider, ThemeProvider } from '@/providers'
 import { Toaster } from '@/components/ui/toaster'
 import { routing } from '@/i18n/routing'
