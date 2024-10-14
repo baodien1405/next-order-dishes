@@ -36,7 +36,8 @@ export default async function Home({ params: { locale } }: { params: { locale: s
           src="/banner.png"
           width={400}
           height={200}
-          quality={100}
+          quality={80}
+          loading="lazy"
           alt="Banner"
           className="absolute top-0 left-0 w-full h-full object-cover"
           title="banner"
@@ -63,6 +64,8 @@ export default async function Home({ params: { locale } }: { params: { locale: s
                   width={150}
                   height={150}
                   alt={dish.name}
+                  quality={80}
+                  loading="lazy"
                   className="object-cover w-[150px] h-[150px] rounded-md"
                   title={dish.name}
                 />
