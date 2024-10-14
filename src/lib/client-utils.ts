@@ -21,6 +21,7 @@ import { authService, guestService } from '@/services'
 import { DishStatus, OrderStatus, Role, TableStatus } from '@/constants'
 import { envConfig } from '@/configs'
 import { TokenPayload } from '@/types'
+import { defaultLocale } from '@/i18n/config'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -146,7 +147,7 @@ export const getVietnameseTableStatus = (status: (typeof TableStatus)[keyof type
 }
 
 export const getTableLink = ({ token, tableNumber }: { token: string; tableNumber: number }) => {
-  return `${envConfig.NEXT_PUBLIC_URL}/tables/${tableNumber}?token=${token}`
+  return `${envConfig.NEXT_PUBLIC_URL}/${defaultLocale}/tables/${tableNumber}?token=${token}`
 }
 
 export function removeAccents(str: string) {
