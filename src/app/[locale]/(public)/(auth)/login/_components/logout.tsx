@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, memo } from 'react'
 
 import { path } from '@/constants'
 import { useAppStore, useLogoutMutation } from '@/hooks'
@@ -8,7 +8,7 @@ import { getAccessTokenFromLS, getRefreshTokenFromLS } from '@/lib/common'
 import { useRouter } from '@/i18n/routing'
 import { SearchParamsLoader, useSearchParamsLoader } from '@/components/search-params-loader'
 
-export function Logout() {
+function LogoutInner() {
   const router = useRouter()
   const { searchParams, setSearchParams } = useSearchParamsLoader()
   const logoutRequestRef = useRef<any>(null)
@@ -36,19 +36,15 @@ export function Logout() {
 
         setRole(undefined)
         disconnectSocket()
-        router.push(path.LOGIN)
       })
-    } else {
+    } else if (accessTokenFromUrl !== getAccessTokenFromLS()) {
       router.push(path.HOME)
     }
 
     return () => clearTimeout(timeoutRef.current)
   }, [mutateAsync, router, refreshTokenFromUrl, accessTokenFromUrl, setRole, disconnectSocket])
 
-  return (
-    <>
-      <SearchParamsLoader onParamsReceived={setSearchParams} />
-      <span>Logout...</span>
-    </>
-  )
+  return <SearchParamsLoader onParamsReceived={setSearchParams} />
 }
+
+export const Logout = memo(LogoutInner)

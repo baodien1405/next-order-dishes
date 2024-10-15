@@ -1,6 +1,6 @@
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server'
 
-import { LoginForm } from '@/app/[locale]/(public)/(auth)/login/_components'
+import { LoginForm, Logout } from '@/app/[locale]/(public)/(auth)/login/_components'
 import { Locale } from '@/i18n/config'
 import { envConfig } from '@/configs'
 import { path } from '@/constants'
@@ -24,6 +24,7 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
   return (
     <div className="min-h-screen flex items-center justify-center">
       <LoginForm />
+      <Logout />
     </div>
   )
 }

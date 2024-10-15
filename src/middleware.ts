@@ -10,13 +10,14 @@ const managePaths = ['/vi/manage', '/en/manage']
 const guestPaths = ['/vi/guest', '/en/guest']
 const onlyOwnerPaths = ['/vi/manage/accounts', '/en/manage/accounts']
 const privatePaths = [...managePaths, ...guestPaths]
-const authPaths = ['/vi/login', '/en/login']
+const unAuthPaths = ['/vi/login', '/en/login']
+const loginPaths = ['/vi/login', '/en/login']
 
 export function middleware(request: NextRequest) {
   const handleI18nRouting = createMiddleware(routing)
 
   const response = handleI18nRouting(request)
-  const { pathname } = request.nextUrl
+  const { pathname, searchParams } = request.nextUrl
   const accessToken = request.cookies.get('accessToken')?.value
   const refreshToken = request.cookies.get('refreshToken')?.value
   const locale = request.cookies.get('NEXT_LOCALE')?.value ?? routing.defaultLocale
@@ -26,15 +27,14 @@ export function middleware(request: NextRequest) {
     url.searchParams.set('clearTokens', 'true')
 
     return NextResponse.redirect(url)
-    // response.headers.set('x-middleware-rewrite', url.toString())
-    // return response
   }
 
   if (refreshToken) {
-    if (authPaths.some((path) => pathname.startsWith(path))) {
+    if (unAuthPaths.some((path) => pathname.startsWith(path))) {
+      if (loginPaths.some((path) => pathname.startsWith(path)) && searchParams.get('accessToken')) {
+        return response
+      }
       return NextResponse.redirect(new URL(`/${locale}`, request.url))
-      // response.headers.set('x-middleware-rewrite', new URL(path.HOME, request.url).toString())
-      // return response
     }
 
     if (privatePaths.some((path) => pathname.startsWith(path)) && !accessToken) {
@@ -44,8 +44,6 @@ export function middleware(request: NextRequest) {
       url.searchParams.set('redirect', pathname)
 
       return NextResponse.redirect(url)
-      // response.headers.set('x-middleware-rewrite', url.toString())
-      // return response
     }
 
     const role = jwtDecode<TokenPayload>(refreshToken).role
@@ -56,8 +54,6 @@ export function middleware(request: NextRequest) {
 
     if (isGuestGoToManagePath || isNotGuestGoToGuestPath || isNotOwnerGoToOwnerPath) {
       return NextResponse.redirect(new URL(`/${locale}`, request.url))
-      // response.headers.set('x-middleware-rewrite', new URL(path.HOME, request.url).toString())
-      // return response
     }
 
     return response
