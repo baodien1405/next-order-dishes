@@ -12,6 +12,7 @@ import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { useChangePasswordMutation } from '@/hooks'
 import { handleErrorApi } from '@/lib/client-utils'
 import { useToast } from '@/components/ui/use-toast'
+import { setAccessTokenToLS, setRefreshTokenToLS } from '@/lib/common'
 
 export function ChangePasswordForm() {
   const toast = useToast()
@@ -31,6 +32,9 @@ export function ChangePasswordForm() {
 
     try {
       const response = await changePasswordMutation.mutateAsync(formValues)
+
+      setAccessTokenToLS(response.payload.data.accessToken)
+      setRefreshTokenToLS(response.payload.data.refreshToken)
       toast.toast({ description: response.payload.message })
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })

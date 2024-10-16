@@ -5,6 +5,8 @@ import {
   AccountListResType,
   AccountResType,
   ChangePasswordBodyType,
+  ChangePasswordV2BodyType,
+  ChangePasswordV2ResType,
   CreateEmployeeAccountBodyType,
   CreateGuestBodyType,
   CreateGuestResType,
@@ -35,6 +37,20 @@ export const accountService = {
 
   changePassword(body: ChangePasswordBodyType) {
     return http.put<AccountResType>(`${PREFIX}/change-password`, body)
+  },
+
+  changePasswordV2(body: ChangePasswordV2BodyType) {
+    return http.put<ChangePasswordV2ResType>(`/api${PREFIX}/change-password-v2`, body, {
+      baseUrl: ''
+    })
+  },
+
+  sChangePasswordV2(body: ChangePasswordV2BodyType & { accessToken: string }) {
+    return http.put<ChangePasswordV2ResType>(`${PREFIX}/change-password-v2`, body, {
+      headers: {
+        Authorization: `Bearer ${body.accessToken}`
+      }
+    })
   },
 
   getAll() {

@@ -1,6 +1,6 @@
+import { Role } from '@/constants/type'
+import { LoginRes } from '@/schemaValidations/auth.schema'
 import z from 'zod'
-
-import { Role } from '@/constants'
 
 export const AccountSchema = z.object({
   id: z.number(),
@@ -107,6 +107,14 @@ export const ChangePasswordBody = z
   })
 
 export type ChangePasswordBodyType = z.TypeOf<typeof ChangePasswordBody>
+
+export const ChangePasswordV2Body = ChangePasswordBody
+
+export type ChangePasswordV2BodyType = z.TypeOf<typeof ChangePasswordV2Body>
+
+export const ChangePasswordV2Res = LoginRes
+
+export type ChangePasswordV2ResType = z.TypeOf<typeof ChangePasswordV2Res>
 
 export const AccountIdParam = z.object({
   id: z.coerce.number()
